@@ -39,8 +39,8 @@
 \begin{document}
 \title
 [Optimization: multi-tasker or utopia?
-\hspace{0.1cm}
-\insertframenumber/\inserttotalframenumber]
+%\hspace{0.1cm} \insertframenumber/\inserttotalframenumber
+]
 {Optimization for quantitative decisions: a versatile multi-tasker or an utopia?}
 \author
 [R. Le Riche]
@@ -198,7 +198,7 @@ Random search \hfill ~\\
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \frametitle{Optimization = a quantitative formulation of decision}
 Optimization is a way of mathematically modeling decision.
 \vskip\baselineskip
@@ -217,9 +217,109 @@ Optimization is a way of mathematically modeling decision.
 \end{itemize}
 \end{minipage}
 } % end mbox
-Don't forget the human in the loop ! in \cite{tsoukias2008decision}, broader framework (model of the human rationality) $\Rightarrow$ decision \alert{aiding} theory.
-\\
-Here, modest goal : optimization as a \alert{tool}.
+\newpage
+\vskip 2cm
+{\large
+\begin{center}
+A versatile approach to problem solving.
+\vskip\baselineskip
+Examples :
+\end{center}
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Optimization example: design}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{aircraft_distributed_prop.png}\\
+\vspace{-1cm}
+{\hfill\tiny (from \cite{sgueglia2018exploration})}
+\end{center}
+\vskip\baselineskip
+$x$ = aircraft parameters (here distributed electrical propulsion)\\
+$f()$ = $-1\times$ performance metric (aggregation of $-1\times$ range, cost, take-off length, \ldots) \\
+At the minimum, the design is ``optimal''.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Optimization example: model identification}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{piton_fournaise.jpg}\\
+\vspace{-1cm}
+{\hfill\tiny (from \cite{fukushima2010evolution})}
+\end{center}
+$x$ = dike position, geometry, internal pressure\\
+$f()$ = distance between measures (from RADARSAT-1 satellite) and model (boundary elements, non trivial computation)\\
+At the minimum, the model best matches measurements and should correspond to the underground phenomenon.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Optimization example: image denoising}
+\vspace{-0.5cm}
+\begin{equation*}
+\begin{split}
+\min_x f(x) \quad,\quad & f(x) = \frac{1}{2}\sum_{i=1}^{N_{\text{pixels}}} (y_i - x_i)^2 + 
+\lambda \sum_{i=1}^{N_{\text{pixels}}} \sum_{j \text{ near } i} \lvert x_i - x_j \rvert \\
+& \lambda \ge 0 \quad\text{regularization constant}
+\end{split}
+\end{equation*}
+\begin{center}
+\begin{minipage}[t]{0.2\textwidth}
+\includegraphics[width=\textwidth]{c_clean.png} \\
+{\small target image}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.2\textwidth}
+\includegraphics[width=\textwidth]{c_noisy.png} \\
+{\small \mbox{noisy (observed)} $= y_i$'s}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.2\textwidth}
+\includegraphics[width=\textwidth]{c_denoised.png} \\
+{\small \mbox{denoised (optimized)} $=x^\star$}
+\end{minipage}
+\mbox{\quad}
+\end{center}
+{\scriptsize (from \cite{ravikumar17}) \hfill}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{An utopia ? (part 1)}
+Optimization as a mathematical model for decision
+\vskip\baselineskip
+\mbox{
+\begin{minipage}[c]{0.2\textwidth}
+\includegraphics[width=\textwidth]{decision-clipart.jpg}
+\end{minipage}
+\begin{minipage}[c]{0.7\textwidth}
+\begin{equation*}
+\min_{x \in \mathcal S} f(x)
+\end{equation*}
+\end{minipage}
+} % end mbox
+\vskip\baselineskip
+Don't forget the human in the loop ! 
+\begin{itemize}
+\item In \cite{tsoukias2008decision}, broader framework (model of the human rationality) $\Rightarrow$ decision \alert{aiding} theory.
+\item Multi-Disciplinary Optimization \cite{brevault2020aerospace} as an attempt to model interacting disciplines.
+\item Human systems are complex, not easy to model.
+\end{itemize}
+\begin{block}{}
+Here, modest and practical goal : optimization as a (fascinating) \alert{tool}.
+\end{block}
 \end{frame}
 
 
