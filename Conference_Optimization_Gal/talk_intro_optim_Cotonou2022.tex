@@ -230,7 +230,7 @@ Examples :
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-\frametitle{Optimization example: design}
+\frametitle{Optimization example: aircraft global pre-design}
 \begin{center}
 \includegraphics[width=0.5\textwidth]{aircraft_distributed_prop.png}\\
 \vspace{-1cm}
@@ -240,6 +240,42 @@ Examples :
 $x$ = aircraft parameters (here distributed electrical propulsion)\\
 $f()$ = $-1\times$ performance metric (aggregation of $-1\times$ range, cost, take-off length, \ldots) \\
 At the minimum, the design is ``optimal''.
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Optimization example: blade detailed design}
+\begin{center}
+\centering
+\mbox{
+\includegraphics[width=0.33\linewidth]{Schema_Rotor}
+\includegraphics[width=0.13\linewidth]{blade}
+\includegraphics[width=0.33\linewidth]{rotor}
+}
+\end{center}
+{\footnotesize
+{\normalsize $x$:} The blades are described by 4 cross-sections for a total of 20 design parameters. 
+\\
+{\normalsize $f()$:} 5 constraints about the inlet and outlet relative flow angles, the flow speed reduction, excessive loading and the Mach number of the blade tips.
+The objective function is the polytropic (compressor) efficiency. From \cite{roustant:hal-03217277}.
+}
+\vskip\baselineskip
+Favorable application: non-intuitive design and a small gain makes a large difference.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Optimization example: composite structure design}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{ply_drop.png}
+\end{center}
+$x$ is the orientation of the fibers within the plies of a composite laminate and the location where the plies are dropped.
+\\
+$f()$ mechanical performance (stiffness, low mass, strength, stability, \ldots)
+\\
+Many arrangements of the $x$'s have almost equivalent performances, leading to local optima
+(from \cite{irisarri2014optimal}).
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -253,6 +289,16 @@ At the minimum, the design is ``optimal''.
 $x$ = dike position, geometry, internal pressure\\
 $f()$ = distance between measures (from RADARSAT-1 satellite) and model (boundary elements, non trivial computation)\\
 At the minimum, the model best matches measurements and should correspond to the underground phenomenon.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Optimization example: wind farm layout}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{wind_farm_model.pdf}
+\end{center}
+$x$ = position and characteristics of the wind mill, electrical network.
+$f()$ = cost aggregated with -1 $\times$ average power production.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -286,12 +332,54 @@ At the minimum, the model best matches measurements and should correspond to the
 {\scriptsize (from \cite{ravikumar17}) \hfill}
 \end{frame}
 
-
-
-
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Optimization example: neural net learning}
+%\vspace{-0.3cm}
+%learn a function from a discrete limited set of observations
+%\begin{center}
+%\begin{minipage}{0.6\textwidth}
+%\begin{tikzpicture}
+%\node[anchor=south west,inner sep=0, outer sep=0] (contour) at (0,0) {\includegraphics[width=\textwidth]{neuralnet3-4-1-regress-crop.pdf}};
+%\begin{scope}[x={(contour.south east)},y={(contour.north west)}]
+%%\draw[help lines,xstep=0.1,ystep=0.1] (0,0) grid (1,1);
+%\node[] (e1) at (0.6,0.2) {\small $e_1$};
+%\node[] (e2) at (0.9,0.15) {\small $e_2$};
+%\node[] (t) at (0.6,0.85) {\small $t(e)$};
+%\node[] (e1NN) at (-0.05,0.75) {\small $e_1$};
+%\node[] (e2NN) at (-0.05,0.60) {\small $e_2$};
+%\node[] (yy) at (0.48,0.69) {\small $y(e \mathchar\numexpr"6000+`;\relax x)$};
+%\draw[black,fill=black] (0.6,0.63) circle (.15ex);
+%\draw[black,fill=black] (0.9,0.35) circle (.15ex);
+%\draw[black,fill=black] (0.665,0.78) circle (.15ex);
+%\draw[black,fill=black] (0.78,0.7) circle (.15ex);
+%\draw[black,fill=black] (0.7,0.5) circle (.15ex);
+%\draw[black,fill=black] (0.85,0.55) circle (.15ex);
+%\draw[black,fill=black] (0.75,0.35) circle (.15ex);
+%\end{scope}
+%\end{tikzpicture}
+%\end{minipage}
+%\end{center}
+%\vspace{-0.5cm}
+%$x$ = neural network (NN) weights and biases\\
+%$f()$ = an error of the NN predictions (loss function):
+%\begin{itemize}
+%\item $e$ entries, $t(e)$ target function to learn
+%\item observed data set, ``\tikz\draw[black,fill=black] (0,0) circle (.15ex);'' : $(e^i,t^i),~ i=1,\ldots,N$
+%\item $y(e;x)$: output of the NN
+%\item For example, $f(x) = 1/2 \sum_{i=1}^N (t^i - y(e^i;x))^2 $
+%\end{itemize}
+\begin{minipage}{0.5\textwidth}
+$x$ = neural network (NN) weights and biases
+\vskip\baselineskip
+$f()$ = an error of the NN predictions w.r.t. data (a loss function)
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\textwidth}
+\includegraphics[width=\textwidth]{neuralnetwork_CC0_public_domain.jpg} \\
+{\tiny from \url{techxplore.com/news/2020-11-neural-network.html}, CC0 public domain \par}
+\end{minipage}
+\end{frame}
 
 
 
