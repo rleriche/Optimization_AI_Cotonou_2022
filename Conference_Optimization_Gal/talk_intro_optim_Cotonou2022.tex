@@ -19,7 +19,8 @@
 \usepackage{xifthen}
 \usepackage{multicol}
 \usepackage{mathtools}
-\usepackage{algorithm,algorithmic}
+\usepackage{algorithm,algorithmicx}
+\usepackage{algcompatible}
 \usepackage{bbm}
 \usepackage{textcomp}
 \usepackage{yfonts}
@@ -117,8 +118,9 @@ Some recent algorithms are highly cited, i.e., are seen as key technological com
 \begin{itemize}
 \item NAG (\cite{nesterov1983method}, 1983, $>5500$ citations),
 \item CMA-ES (\cite{hansen2001completely}, 2001, $>4100$ citations),
+\item ADAGRAD (\cite{duchi2011adaptive}, 2011, $>10400$ citations),
 \item RMSprop (\cite{tieleman2012lecture}, 2012, $>6000$ citations),
-\item ADAM (\cite{kingma2014adam}, 2014, $>113000$ citations),
+\item Adam (\cite{kingma2014adam}, 2014, $>113000$ citations),
 \item \ldots
 \end{itemize}
 \end{frame}
@@ -136,8 +138,9 @@ What are we talking about?
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \frametitle{The fundamental optimization problem}
+\begin{minipage}{\textwidth}
 \begin{minipage}{0.5\textwidth}
 \centering
 \includegraphics[width=0.9\textwidth]{michalewicz_local_global.png} \\
@@ -153,6 +156,44 @@ Find the lowest point of a function,
 \vskip\baselineskip
 Looks easy on this drawing. \\
 But the function is known pointwise, each evaluation costs computer time, and $\mathcal S$ may be complex (high-dimensional, non-continuous, constrained \ldots)
+\end{minipage}
+\newpage
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{tikzpicture}
+\node[anchor=south west,inner sep=0, outer sep=0] (contour) at (0,0) {
+\includegraphics[width=0.9\textwidth]{two_3D_points.png}
+};
+\begin{scope}[x={(contour.south east)},y={(contour.north west)}]
+%\draw[help lines,xstep=0.1,ystep=0.1] (0,0) grid (1,1);
+\node[] (xstar) at (0.73,0.5) {$\widehat{x^\star}$};
+\node[] (xprime) at (0.37,0.65) {$x'$};
+\end{scope}
+\end{tikzpicture}
+\vspace{-0.4cm}
+{\small (what the random optimizer sees)}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+Random search \hfill ~\\
+\noindent\rule{\textwidth}{1pt}
+{\scriptsize
+\begin{algorithmic}%[1]
+\REQUIRE $x^\text{LB},~x^\text{UB},t^\text{max}$
+\STATEx $t \leftarrow 0,~\widehat{f^\star} \leftarrow + \infty$
+\WHILE{$t<t^\text{max}$}
+\STATE $x' \leftarrow \mathcal U[x^\text{LB},~x^\text{UB}]\quad$ \COMMENT{uniform law}
+\STATE calculate $f(x')$, $t \leftarrow t+1$
+\IF{$f(x')<\widehat{f^\star}$}
+\STATE $\widehat{x^\star}\leftarrow x' \quad,\quad \widehat{f^\star} \leftarrow f(x')$
+\ENDIF
+\ENDWHILE
+\STATE \textbf{return} $\widehat{x^\star}, \widehat{f^\star}$
+\end{algorithmic}
+}
+\vspace{-0.8\baselineskip}
+\noindent\rule{\textwidth}{1pt}
+\end{minipage}
 \end{frame}
 
 \section{Bibliography}
