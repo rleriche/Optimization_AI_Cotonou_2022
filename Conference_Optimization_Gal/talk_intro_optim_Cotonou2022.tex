@@ -10,7 +10,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\graphicspath{{figures/}}
+\graphicspath{{figures/}{Figures/}}
 %\usepackage{beamerthemesplit}
 %\usepackage{beamerthemeshadow} 
 \usepackage{color}
@@ -37,12 +37,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 \title
-[which GP for BO?
-\hspace{0.5cm}
+[Optimization: multi-tasker or utopia?
+\hspace{0.1cm}
 \insertframenumber/\inserttotalframenumber]
 {Optimization for quantitative decisions: a versatile multi-tasker or an utopia?}
 \author
-[R. Le Riche et al.]
+[R. Le Riche]
 {\large Rodolphe Le Riche$^{*}$}
 \institute[CNRS LIMOS]{$^*$~CNRS at LIMOS (Mines Saint Etienne, UCA) France
 } 
@@ -64,54 +64,18 @@ Cotonou, Benin, IA summer school
 %\end{frame}
 
 
-\iffalse
 %=======================================================================================
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \frametitle{The advent of optimization algorithms}
 \begin{minipage}[b]{0.25\textwidth}
 \centering
-\includegraphics[width=0.8\textwidth]{Figures/NAO.png}
-\\ ``Intelligence'' =
-\end{minipage} 
-\hfill{\scriptsize \cite{bachoptimization}}
-\\
-\hfill
-\begin{minipage}[b]{0.2\textwidth}
-\centering
-\includegraphics[width=\textwidth]{Figures/neural_network.png} \\
- models + 
-\end{minipage} 
-\begin{minipage}[b]{0.2\textwidth}
-\centering
-\includegraphics[width=0.5\textwidth]{Figures/algorithm.png} \\
-\alert{algorithms} + 
-\end{minipage} 
-\begin{minipage}[b]{0.2\textwidth}
-\centering
-\includegraphics[width=\textwidth]{Figures/data.png} \\
-data + 
-\end{minipage} 
-\begin{minipage}[b]{0.2\textwidth}
-\centering
-\includegraphics[width=\textwidth]{Figures/supercomputer.jpg} \\
-computing power 
-\end{minipage} 
-%``Intelligence'' = models + \alert{algorithms} + data + computing power 
-\end{frame}
-\fi
-
-%=======================================================================================
-\begin{frame}
-\frametitle{The advent of optimization algorithms}
-\begin{minipage}[b]{0.25\textwidth}
-\centering
-\includegraphics[width=0.8\textwidth]{Figures/NAO.png}
+\includegraphics[width=0.4\textwidth]{Figures/NAO.png}
 \\ ``Intelligence'' =
 \end{minipage} 
 \hfill
 \begin{minipage}[b]{0.2\textwidth}
 {\scriptsize \cite{bachoptimization}}
-\vskip 3cm
+\vskip 2cm
 ~
 \end{minipage} 
 \\
@@ -140,10 +104,47 @@ computing power
 \\\vskip 0.2cm
 \includegraphics[width=\textwidth]{Figures/supercomputer.jpg} 
 \end{minipage} 
-%``Intelligence'' = models + \alert{algorithms} + data + computing power 
+\newpage
+There are numerous conferences$^\star$ (and journals) where new optimization algorithms are presented, whether in 
+\begin{itemize}
+\item applied mathematics. Ex: {\scriptsize SIAM Conf. on Optimization, FGS (French-German-Swiss) workshops series, PGMO Days, \ldots}
+\item computer science (including machine learning). Ex: {\scriptsize LION (Learning and Intelligent OptimizatioN conf.), EURO (EURopean Operational research soc.) conf., Optimization days, NEURIPS, \ldots}
+\item or in application fields. Ex: {\scriptsize SIAM Conf. on Uncertainty Quantification (statistics), AIAA/MAO (Multidisciplinary Analysis and Optimization) or WCSMO (World Congress on Structural and Multidisciplinary Optimization) conferences (engineering), ECCOMAS (aeronautics), ICASP (civil engineering), \ldots}
+\end{itemize}
+\hfill($^\star$ {\scriptsize : arbitrarily listing some of the meetings I participated to} )
 \end{frame}
 
 
+%=======================================================================================
+\begin{frame}
+\frametitle{}
+\centering
+{\usebeamerfont*{frametitle}\usebeamercolor[fg]{frametitle} 
+Optimization algorithms? 
+\vskip\baselineskip
+What are we talking about?
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{The fundamental optimization problem}
+\begin{minipage}{0.5\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{michalewicz_local_global.png} \\
+\vspace{-0.4cm}
+{\small (2D continuous example)}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+Find the lowest point of a function,
+\begin{equation*}
+\min_{x \in \mathcal S } f(x)
+\end{equation*}
+\end{minipage}
+\vskip\baselineskip
+Looks easy on this drawing. \\
+But the function is known pointwise and $\mathcal S$ may be complex (high-dimensional, non-continuous,\ldots)
+\end{frame}
 
 \section{Bibliography}
 
