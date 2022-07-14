@@ -50,7 +50,7 @@
 \date[July 2022]{25 July 2022 \\
 Cotonou, Benin, IA summer school 
 \\\vskip\baselineskip
-{\small Acknowledgements : Vallet fundation}
+{\small Acknowledgements : Vallet foundation, Bernard Guy}
 } 
 \begin{frame}
 \titlepage
@@ -335,40 +335,6 @@ $f()$ = cost aggregated with -1 $\times$ average power production.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Optimization example: neural net learning}
-%\vspace{-0.3cm}
-%learn a function from a discrete limited set of observations
-%\begin{center}
-%\begin{minipage}{0.6\textwidth}
-%\begin{tikzpicture}
-%\node[anchor=south west,inner sep=0, outer sep=0] (contour) at (0,0) {\includegraphics[width=\textwidth]{neuralnet3-4-1-regress-crop.pdf}};
-%\begin{scope}[x={(contour.south east)},y={(contour.north west)}]
-%%\draw[help lines,xstep=0.1,ystep=0.1] (0,0) grid (1,1);
-%\node[] (e1) at (0.6,0.2) {\small $e_1$};
-%\node[] (e2) at (0.9,0.15) {\small $e_2$};
-%\node[] (t) at (0.6,0.85) {\small $t(e)$};
-%\node[] (e1NN) at (-0.05,0.75) {\small $e_1$};
-%\node[] (e2NN) at (-0.05,0.60) {\small $e_2$};
-%\node[] (yy) at (0.48,0.69) {\small $y(e \mathchar\numexpr"6000+`;\relax x)$};
-%\draw[black,fill=black] (0.6,0.63) circle (.15ex);
-%\draw[black,fill=black] (0.9,0.35) circle (.15ex);
-%\draw[black,fill=black] (0.665,0.78) circle (.15ex);
-%\draw[black,fill=black] (0.78,0.7) circle (.15ex);
-%\draw[black,fill=black] (0.7,0.5) circle (.15ex);
-%\draw[black,fill=black] (0.85,0.55) circle (.15ex);
-%\draw[black,fill=black] (0.75,0.35) circle (.15ex);
-%\end{scope}
-%\end{tikzpicture}
-%\end{minipage}
-%\end{center}
-%\vspace{-0.5cm}
-%$x$ = neural network (NN) weights and biases\\
-%$f()$ = an error of the NN predictions (loss function):
-%\begin{itemize}
-%\item $e$ entries, $t(e)$ target function to learn
-%\item observed data set, ``\tikz\draw[black,fill=black] (0,0) circle (.15ex);'' : $(e^i,t^i),~ i=1,\ldots,N$
-%\item $y(e;x)$: output of the NN
-%\item For example, $f(x) = 1/2 \sum_{i=1}^N (t^i - y(e^i;x))^2 $
-%\end{itemize}
 \begin{minipage}{0.5\textwidth}
 $x$ = neural network (NN) weights and biases
 \vskip\baselineskip
@@ -410,6 +376,54 @@ Here, modest and practical goal : optimization as a (fascinating) \alert{tool}.
 \end{block}
 \end{frame}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+\frametitle{Historical and epistemological hints}
+Emergence conditions : optimization algorithms have become a scientific subject of its own when the problem to solve has been decomposed into 
+\begin{itemize}
+\item a real object to optimize,
+\item a space of representations $\mathcal S$ where $x$ is chosen,
+\item a performance model $f(x)$,
+\item a motion principle (the optimization algorithm).
+\end{itemize}
+\pagebreak
+Optimization problems were solved before, but in a unified manner: 
+\vskip\baselineskip
+\mbox{
+\begin{minipage}{0.4\textwidth}
+The Brachistochrone curve: minimize time to go from A to B with a frictionless ball under the action of gravity.
+Posed and solved by Johann Bernoulli in 1696.
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\includegraphics[width=\textwidth]{Bernoulli_Challenge_to_Newton_1.png} \\
+\end{minipage}
+}
+\pagebreak
+\begin{minipage}{0.4\textwidth}
+Hooke's theorem (1675) :\\
+``As hangs the flexible chain, so but inverted will stand the rigid arch.''
+\\
+\begin{center}
+\includegraphics[width=0.45\textwidth]{arche.png}
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\textwidth}
+\includegraphics[width=\textwidth]{Robert-Hooke.jpeg} \\
+{\tiny 
+Robert Hooke holding a chain that forms a catenary curve. 
+Image by Rita Greer. Licensed under Free Art License 1.3, via Wikimedia Commons.}
+\end{minipage}
+
+
+\begin{block}{A decomposition principle in science}
+Elements of scientific knowledge appear in relation to a problem that is sufficiently decomposed.
+\end{block}
+Close to Descartes' 2nd Rule in Discourse on the Method : ``Divide each difficulty into as many parts as is feasible and necessary to resolve it''
+(but more on a spontaneous architecture of a problem).\\
+
+\end{frame}
 
 \section{Bibliography}
 
