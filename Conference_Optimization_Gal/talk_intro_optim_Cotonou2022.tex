@@ -376,36 +376,89 @@ Here, modest and practical goal : optimization as a (fascinating) \alert{tool}.
 \end{block}
 \end{frame}
 
+%=======================================================================================
+\begin{frame}
+\frametitle{}
+\centering
+{\usebeamerfont*{frametitle}\usebeamercolor[fg]{frametitle} 
+Historical and epistemological hints
+\vskip\baselineskip
+}
+\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[allowframebreaks]
-\frametitle{Historical and epistemological hints}
-Emergence conditions : optimization algorithms have become a scientific subject of its own when the problem to solve has been decomposed into 
+\begin{frame}%[allowframebreaks]
+\frametitle{Emergence conditions}
+Optimization algorithms have become a scientific subject of its own when the problem to solve has been decomposed into 
 \begin{itemize}
 \item a real object to optimize,
 \item a space of representations $\mathcal S$ where $x$ is chosen,
-\item a performance model $f(x)$,
+\item a model of the object valid for each representation, $m(x)$,
+\item a performance measure $f(m(x))$,
 \item a motion principle (the optimization algorithm).
 \end{itemize}
-\pagebreak
-Optimization problems were solved before, but in a unified manner: 
 \vskip\baselineskip
-\mbox{
-\begin{minipage}{0.4\textwidth}
-The Brachistochrone curve: minimize time to go from A to B with a frictionless ball under the action of gravity.
-Posed and solved by Johann Bernoulli in 1696.
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-\includegraphics[width=\textwidth]{Bernoulli_Challenge_to_Newton_1.png} \\
-\end{minipage}
+{\footnotesize
+Ex. in engineering: an object to design, $x$ CAD parameters, $m(x)$ a finite elements model, $f()$ a compromise between -strength and cost. \\
+Ex. in machine learning: a neural network to learn, $x$ the weights, $m(x)$ the responses of the network over a certain data base, $f()$ the loss function.
 }
-\pagebreak
+\end{frame}
+
+%=======================================================================================
+\begin{frame}
+\frametitle{The decomposition principle}
+\begin{block}{}
+Elements of scientific knowledge appear when a problem is sufficiently decomposed.
+\end{block}
+\begin{itemize}
+\item Close to Descartes' 2nd Rule in Discourse on the Method : ``Divide each difficulty into as many parts as is feasible and necessary to resolve it''
+(but applied to a scientific domain).
+\end{itemize}
+In the case of optimizers:
+\begin{itemize}
+\item A space-time generalized decomposition in the sense of Bernard Guy \cite{guyTempsEspace}, where time related to the motion of the optimizer.
+\item Parallel with Piaget, constructivisme
+\end{itemize}
+\end{frame}
+
+%=======================================================================================
+\begin{frame}
+\frametitle{}
+~
+\vfill
+{\large
+The emergence of optimization algorithms occured after World-War II.\\
+Optimization problems were solved before, but in a unified manner. \\
+\vskip\baselineskip
+Examples:
+}
+\vfill
+~
+\end{frame}
+
+%=======================================================================================
+\begin{frame}
+\frametitle{da Vinci's flying machine}
+\begin{center}
+Design for a flying machine, Leonardo da Vinci, 1488.
+\vskip\baselineskip
+\begin{minipage}{0.8\textwidth}
+\includegraphics[width=\textwidth]{Mechanical-Wing-Devices-Leonardo-da-Vinci-ca-1485-From-Miller-2008_W640.jpg} \\
+\end{minipage}
+\end{center}
+\end{frame}
+
+%=======================================================================================
+\begin{frame}
+\frametitle{Hooke's arch}
 \begin{minipage}{0.4\textwidth}
+Optimization of an arch.\\
 Hooke's theorem (1675) :\\
 ``As hangs the flexible chain, so but inverted will stand the rigid arch.''
 \\
 \begin{center}
-\includegraphics[width=0.45\textwidth]{arche.png}
+\includegraphics[width=0.65\textwidth]{arche.png}
 \end{center}
 \end{minipage}
 \hfill
@@ -415,14 +468,49 @@ Hooke's theorem (1675) :\\
 Robert Hooke holding a chain that forms a catenary curve. 
 Image by Rita Greer. Licensed under Free Art License 1.3, via Wikimedia Commons.}
 \end{minipage}
+\end{frame}
 
+%=======================================================================================
+\begin{frame}
+\frametitle{The Brachistochrone curve}
+\begin{minipage}{\textwidth}
+Minimize time to go from a point to a lower point with a frictionless ball under the action of gravity. 
+\vskip\baselineskip
+Posed and solved by Johann Bernoulli in 1696.
+\end{minipage}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Bernoulli_Challenge_to_Newton_1.png} \\
+\end{center}
+\end{frame}
 
-\begin{block}{A decomposition principle in science}
-Elements of scientific knowledge appear in relation to a problem that is sufficiently decomposed.
-\end{block}
-Close to Descartes' 2nd Rule in Discourse on the Method : ``Divide each difficulty into as many parts as is feasible and necessary to resolve it''
-(but more on a spontaneous architecture of a problem).\\
+%=======================================================================================
+\begin{frame}
+\frametitle{Millau's viaduct}
+\begin{minipage}{\textwidth}
+Michel Virlogeux, main designer:\\  
+``The preliminary design of Millau's viaduct was first scribbled on a restaurant tablecloth and it was quite right. Computations then confirmed the ideas and fine tuned the details.'' 
+\end{minipage}
+\vskip\baselineskip
+\mbox{
+\begin{minipage}{0.4\textwidth}
+{\scriptsize (talk at Maison de la Mécanique, Courbevoie, France, around 2005. \\
+Millau's viaduct is currently the tallest bridge in the world.)}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+\includegraphics[width=\textwidth]{ViaducdeMillau.jpg} 
+\end{minipage}
+}
+\end{frame}
 
+%=======================================================================================
+\begin{frame}
+\frametitle{The first optimization algorithms}
+They appeared after World-War II, in relation with the first computers and a sufficient maturity (cf. earlier decomposition principle).
+\begin{itemize}
+\item The Steepest Descent Algorithm was formulated in its general form in 1944 by Haskell B. Curry \cite{curry1944method} after initial ideas by Augustin Louis Cauchy in 1847 applied to astronomical equations solving \cite{lemarechal2012cauchy}.
+\item The Simplex Algorithm for solving linear problems was proposed around 1947 by George B. Dantzig \cite{dantzig1955generalized}.
+\item The Response Surface Method for approximating $f$ by a quadratic function throughout $\mathcal S$ was proposed by George E. P. Box and Kenneth B. Wilson in 1951 \cite{box1951experimental}.
+\end{itemize}
 \end{frame}
 
 \section{Bibliography}
