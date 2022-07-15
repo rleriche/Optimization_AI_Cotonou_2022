@@ -57,6 +57,18 @@ Cotonou, Benin, IA summer school
 \end{frame}
 
 %=======================================================================================
+\begin{frame}
+\frametitle{Abstract} 
+The study of optimization algorithms started at the end of World War II with a constantly growing interest, fueled by needs in engineering, computational simulation and Machine Learning.
+In this talk, we look into the history of the new scientific objects that are the optimizers. 
+The point-of-view will not be mathematical, but rather historical and philosophical.
+The conditions for the emergence of optimizers correspond to a decomposition principle in science. 
+Although optimizers are tools, they guide through a space of representations which fascinates because it resembles learning. 
+Optimization problems are also utopias: rationality is bounded, they are over-simplifications of a human-based decision process and computational capacities are limited.  
+The presentation finishes with recent challenges in optimization.
+\end{frame}
+
+%=======================================================================================
 %\begin{frame}[allowframebreaks]
 %\frametitle{Content} 
 %\begin{multicols}{2}
@@ -348,10 +360,9 @@ $f()$ = an error of the NN predictions w.r.t. data (a loss function)
 \end{frame}
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-\frametitle{An utopia ? (part 1)}
+\frametitle{An utopia ? Humans in the loop}
 Optimization as a mathematical model for decision
 \vskip\baselineskip
 \mbox{
@@ -417,8 +428,8 @@ Elements of scientific knowledge appear when a problem is sufficiently decompose
 \end{itemize}
 In the case of optimizers:
 \begin{itemize}
-\item A space-time generalized decomposition in the sense of Bernard Guy \cite{guyTempsEspace}, where time related to the motion of the optimizer.
-\item Parallel with Piaget, constructivisme
+\item A space-time generalized decomposition in the sense of Bernard Guy \cite{guyTempsEspace}, where time is related to the motion of the optimizer.
+\item When applied to machine learning, optimizers are part of a constructivist system \cite{sarkar2016constructivist}: learnings occurs by the interaction between perception (ideas, = simulated actions) and action, new experience, in a trial and error process guided by the optimizer.
 \end{itemize}
 \end{frame}
 
@@ -428,7 +439,7 @@ In the case of optimizers:
 ~
 \vfill
 {\large
-The emergence of optimization algorithms occured after World-War II.\\
+The emergence of optimization algorithms occured after World War II.\\
 Optimization problems were solved before, but in a unified manner. \\
 \vskip\baselineskip
 Examples:
@@ -505,11 +516,68 @@ Millau's viaduct is currently the tallest bridge in the world.)}
 %=======================================================================================
 \begin{frame}
 \frametitle{The first optimization algorithms}
-They appeared after World-War II, in relation with the first computers and a sufficient maturity (cf. earlier decomposition principle).
+They appeared after World War II, thanks to the first computers and a sufficient scientific maturity (cf. decomposition principle).
 \begin{itemize}
 \item The Steepest Descent Algorithm was formulated in its general form in 1944 by Haskell B. Curry \cite{curry1944method} after initial ideas by Augustin Louis Cauchy in 1847 applied to astronomical equations solving \cite{lemarechal2012cauchy}.
 \item The Simplex Algorithm for solving linear problems was proposed around 1947 by George B. Dantzig \cite{dantzig1955generalized}.
 \item The Response Surface Method for approximating $f$ by a quadratic function throughout $\mathcal S$ was proposed by George E. P. Box and Kenneth B. Wilson in 1951 \cite{box1951experimental}.
+\end{itemize}
+\end{frame}
+
+
+%=======================================================================================
+\begin{frame}[allowframebreaks]
+\frametitle{Today's optimization algorithms}
+{\footnotesize (the discussion is voluntarily kept as short and non-technical as possible)}
+\vskip\baselineskip
+\begin{itemize}
+\item Proven rapid (in polynomial time or super-linear) convergence for convex problems: cf. improved gradient descents such as BFGS (accounting for curvatures) and NAG \cite{nesterov1983method}.
+\item Algorithms adapted to stochastic functions (variants of stochastic gradients such as Adam \cite{kingma2014adam}).
+\item Algorithms using stochastic choices (e.g., CMA-ES \cite{hansen2001completely}).
+\item[$\Rightarrow$] Recognition of the importance of uncertainties, for which randomness is both an ingredient and a cure.
+\newpage
+\item Algorithms building models of the function (Bayesian optimization, \cite{ExpectedImprovement}) or of their validity domain (DFO, \cite{audet2017derivative}).
+\item A lot of specialized versions: with/without constraints, for multiple objectives, with discrete and/or continuous variables, depending on the numerical cost of the function and the number of variables, \ldots
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{An utopia ? Computational limitations}
+The fundamental problem, $ \min_{x \in \mathcal S } f(x) $,
+is rarely solved in practice because the optimizer stops its iterations earlier (computational limitation).\\
+\begin{minipage}{0.4\textwidth}
+In machine learning, when optimizing the loss function with a stochastic gradient, a situation in between the red and the blue convergences occurs. Yet, ``it works''.
+\end{minipage}
+\hfill
+\begin{minipage}{0.55\textwidth}
+\includegraphics[width=\textwidth]{tooHigh.png} 
+\end{minipage}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{An utopia ? Bounded rationality}
+(cf. Herbert A. Simon)
+\vskip\baselineskip
+what's the point of accurately solving the problem since the formulation will always be imperfect? 
+\begin{itemize}
+\item The model, $m()$ is inaccurate.
+\item Some variables are missing (some dimensions of $\mathcal S$).
+\item Other objectives (utilities, $f_1(),\ldots,f_N()$, $N$ potentially infinite) exist as well.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Some current challenges}
+Optimization algorithms are a recent research domain. Still a lot to do!
+\begin{itemize}
+\item Properly testing and characterizing optimization algorithms is needed. The relationship between the best optimizer and the problem is complex. Initial work in {\scriptsize \cite{hansen2021coco,bosse2012relative,kerschke2019automated}}.
+\item Handling uncertainties in optimization problems is fundamental. An active sub-domain. Recent bibliography in {\scriptsize \cite{pelamatti2022coupling}}.
+\item The curse of dimensionality (with limited computations). Cf. e.g. {\scriptsize\cite{binois:hal-03419959}}.
+\item Less common types of variables : mixed (discrete-continuous, e.g.,{\scriptsize\cite{cuesta2022comparison}}), functional, or graph variables.
+\item Massively parallel, asynchronous, fault tolerant optimizers.
 \end{itemize}
 \end{frame}
 
