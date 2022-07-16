@@ -84,7 +84,7 @@ The school was organized by the Benin Excellence NGO and the Vallet Foundation (
 \item through examples coded in python from scratch.
 \item Limitation: the algorithms are not exactly those used in state-of-the-art deep learning, but the main concepts, related to gradient descent, will be presented.
 \end{itemize}
-The code, the slides and the project statement are available at \url{https://github.com/rleriche/Optimization_AI_Cotonou_2022}
+The code, the slides and the project statement are available at {\scriptsize \url{https://github.com/rleriche/Optimization_AI_Cotonou_2022}}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -275,7 +275,6 @@ $f()$ = an error of the NN predictions (sum-of-squares error):
 {\scriptsize (from \cite{ravikumar17}) \hfill}
 \end{frame}
 
-\iffalse
 
 \subsection{Basic mathematical concepts for optimization}
 
@@ -292,7 +291,7 @@ $f()$ = an error of the NN predictions (sum-of-squares error):
 \frametitle{Local versus global optimum} 
 \vspace{-0.5cm}
 \begin{equation*}
-\min_{x \in \mathcal S \subset \Rset[d]} f(x)
+\min_{x \in \mathcal S \subset \Rset[n]} f(x)
 \end{equation*}
 \vspace{-0.5cm}
 \begin{center}
@@ -308,7 +307,7 @@ R code to generate such a 3D plot given in the project folder, \texttt{3Dplots.R
 \frametitle{Gradient of a function} 
 Gradient of a function = direction of steepest ascent = vector of partial derivatives
 \begin{equation*}
-\grad f(x) = \begin{pmatrix} \frac{\partial f}{\partial x_1}(x) \\ \ldots \\ \frac{\partial f}{\partial x_d}(x) \end{pmatrix}
+\grad f(x) = \begin{pmatrix} \frac{\partial f}{\partial x_1}(x) \\ \ldots \\ \frac{\partial f}{\partial x_n}(x) \end{pmatrix}
 \end{equation*}
 \begin{center}
 \begin{minipage}[t]{0.7\textwidth}
@@ -329,7 +328,7 @@ By forward finite differences
 {Proof: \scriptsize
  by Taylor,\\
 $f(x+he^i) = f(x) + h {e^i}^\top . \grad f(x) + h^2/2 {e^i}^\top \hess f(x+\rho h e^i) e^i~,~\rho\in ]0,1[$ \\
-$\grad f(x) = \frac{f(x+he^i)-f(x)}{h} - h/2 {e^i}^\top \hess f(x+\rho h e^i) e^i $ \\
+$\partial f(x)/\partial x_i = \frac{f(x+he^i)-f(x)}{h} - h/2 {e^i}^\top \hess f(x+\rho h e^i) e^i $ \\
 and make $h$ very small $\square$
 }
 \end{minipage}
@@ -346,7 +345,7 @@ Other (better but more difficult to implement) schemes: central differences, aut
 \frametitle{Descent direction} 
 \mbox{
 \begin{minipage}[b]{0.5\textwidth}
-A search direction $d$ which makes an acute angle with $-\grad f(x)$ is a descent direction, i.e., for a small enough step $f$ is guaranteed to decrease!
+A search direction $d$ which makes an acute angle with $-\grad f(x)$ is a descent direction, i.e., for a small enough step, $f$ is guaranteed to decrease!
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.4\textwidth}
@@ -355,7 +354,7 @@ A search direction $d$ which makes an acute angle with $-\grad f(x)$ is a descen
 }
 \\\vspace{0.8cm}
 {\normalsize
-Proof: by Taylor, $\forall \alpha \le 0,~\exists \epsilon \in [0,1]$ such that
+Proof: by Taylor, $\forall \alpha,~\exists \epsilon \in [0,1]$ such that
 $f(x+\alpha d) = f(x) + \alpha d^\top . \grad f(x) + \frac{\alpha^2}{2} d^\top \hess f(x + \alpha \epsilon d) d$\\
 $\lim_{\alpha \rightarrow 0^+} \frac{f(x+\alpha d) - f(x)}{\alpha} = d^\top . \grad f(x) = - 1\times \lVert \grad f(x)\rVert \cos(d,-\grad f(x))$ \\
 is negative if the cosine is positive $\square$
@@ -399,9 +398,10 @@ $\grad f(x^\star) = 0$ does not make $x^\star$ unique (flat valley)
 \frametitle{Necessary optimality condition (4)} 
 \begin{center}
 \includegraphics[width=0.7\textwidth]{L1norm.png} \\
-$\grad f()$ not defined everywhere, example with L1 norm $= \sum_i^d \lvert x_i \rvert$
+$\grad f()$ not defined everywhere, example with L1 norm $= \sum_i^n \lvert x_i \rvert$
 \end{center}
 \end{frame}
+
 
 \section{Steepest descent algorithm}
 
@@ -419,13 +419,13 @@ $\grad f()$ not defined everywhere, example with L1 norm $= \sum_i^d \lvert x_i 
 \begin{frame}
 \frametitle{Optimizers as iterative algorithms} 
 \begin{equation*}
-\text{We look for }\quad  x^\star \in \arg\min_{x \in \mathcal S} f(x) \quad,\quad \mathcal S = \Rset[d]
+\text{We look for }\quad  x^\star \in \arg\min_{x \in \mathcal S} f(x) \quad,\quad \mathcal S = \Rset[n]
 \end{equation*}
 \begin{itemize}
 \item Except for special cases (e.g., convex quadratic problems), the solution is not obtained analytically through the optimality conditions ($\grad f(x^\star) = 0$ + higher order conditions). 
 \item We typically use iterative algorithms: $x^{i+1}$ depends on previous iterates, $x^1,\ldots,x^i$ and their $f$'s.
 \item Often calculating $f(x^i)$ takes more computation than the optimization algorithm itself.
-\item Qualities of an optimizer: robustness, speed of convergence. Often have to strike a compromise between them.
+\item Qualities of an optimizer: robustness, speed of convergence. Have to strike a compromise between them.
 \end{itemize}
 \end{frame}
 
@@ -434,22 +434,22 @@ $\grad f()$ not defined everywhere, example with L1 norm $= \sum_i^d \lvert x_i 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Fixed step steepest descent algorithm (1)} 
-Repeat steps along the steepest descent direction, $-\grad f(x^t)$ \cite{cauchy1847methode}. \\
+Repeat steps along the steepest descent direction, $-\grad f(x^t)$ \cite{cauchy1847methode,curry1944method}. \\
 The size of the steps is proportional to the gradient norm.
 \begin{block}{}
 \begin{algorithmic}
 \REQUIRE $f()$, $\alpha \in ]0,1]$, $x^1$, $\epsilon^{\text{step}}$, $\epsilon^{\text{grad}}$, $i^{\text{max}}$
-\STATE $i\leftarrow 0$, $f^{\text{best so far}} \leftarrow $ \texttt{max\_double}
+\STATE $i\leftarrow 0$, $f^{\text{bestSoFar}} \leftarrow $ \texttt{max\_double}
 \REPEAT 
 \STATE $i \leftarrow i+1$
 \STATE calculate $f(x^i)$ and $\grad f(x^i)$
-\IF{$f(x^i)< f^{\text{best so far}}$} 
-\STATE update $x^{\text{best so far}}$ and $f^{\text{best so far}}$ with current iterate
+\IF{$f(x^i)< f^{\text{bestSoFar}}$} 
+\STATE update $x^{\text{bestSoFar}}$ and $f^{\text{bestSoFar}}$ with current iterate
 \ENDIF
 \STATE \textbf{direction: } $d^i = - \grad f(x^i) / \lVert \grad f(x^i) \rVert$
 \STATE \textbf{step: } $x^{i+1} ~=~ x^i + \alpha \lVert \grad f(x^i) \rVert d^i$
 \UNTIL{ {$i>i^{\text{max}}$} \OR {$\lVert x^i - x^{i-1}\rVert \le \epsilon^{\text{step}}$} \OR {$\lVert \grad f(x^i)\rVert \le \epsilon^{\text{grad}}$} }
-\RETURN $x^{\text{best so far}}$ and $f^{\text{best so far}}$
+\RETURN $x^{\text{bestSoFar}}$ and $f^{\text{bestSoFar}}$
 \end{algorithmic}
 \end{block}
 \end{frame}
@@ -539,8 +539,8 @@ Notation: during line search $i$,
 \begin{eqnarray*}
 x &=& x^i + \alpha d^i \\
 f(\alpha) &=& f(x^i + \alpha d^i) \\
-\frac{df(0)}{d\alpha} &=& \sum_{j=1}^d \frac{\partial f(x^i)}{\partial x_j} \frac{\partial x_j}{\partial \alpha}
-~=~\sum_{j=1}^d \frac{\partial f(x^i)}{\partial x_j} d^i_j
+\frac{df(0)}{d\alpha} &=& \sum_{j=1}^n \frac{\partial f(x^i)}{\partial x_j} \frac{\partial x_j}{\partial \alpha}
+~=~\sum_{j=1}^n \frac{\partial f(x^i)}{\partial x_j} d^i_j
 ~=~ \grad f(x^i)^\top . d^i
 \end{eqnarray*}
 In practice, perfectly optimizing for $\alpha^i$ is too expensive and not useful 
@@ -568,10 +568,10 @@ Sufficient decrease condition rewritten with line search notation:
 At iteration $i$:
 \begin{block}{Backtracking line search (Armijo)}
 \begin{algorithmic}
-\REQUIRE $d$ a descent direction, $x^i$, $\delta \in [0,1]$, $\rho \in ]0,1[$, $C>0$
+\REQUIRE $d^i$ a descent direction, $x^i$, $\delta \in [0,1]$, $\rho \in ]0,1[$, $C>0$
 \STATE (defaults: $\delta=0.1,~\rho=0.5,~C=1$)
-\STATE initialize step size: $\alpha = \max(C \times \lVert \grad f(x^i) \rVert ~,~ \sqrt{d}/100) $ 
-\WHILE{$f(x^i + \alpha d^i) \ge f(x) + \delta \alpha \grad f(x^i)^\top . d$}
+\STATE initialize step size: $\alpha = \max(C \times \lVert \grad f(x^i) \rVert ~,~ \sqrt{n}/100) $ 
+\WHILE{$f(x^i + \alpha d^i) \ge f(x^i) + \delta \alpha \grad f(x^i)^\top  d^i$}
 \STATE decrease step size: $\alpha \leftarrow \rho \times \alpha$
 \ENDWHILE 
 \RETURN $\alpha^i \leftarrow \alpha$
@@ -599,7 +599,7 @@ Better, but not perfect: oscillations make progress very slow.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Gradient convergence speed} 
-$f(x) = \frac{1}{2} x^\top H x$ in $d=10$ dimensions, $H>0$, not aligned with the axes, condition number = 10.
+$f(x) = \frac{1}{2} x^\top H x$ in $n=10$ dimensions, $H>0$, not aligned with the axes, condition number = 10.
 \begin{center}
 \mbox{
 \begin{minipage}[c]{0.37\textwidth}
@@ -630,7 +630,7 @@ Perfect line search solves
 \end{equation*}
 Necessary conditions of optimal step size: 
 \begin{equation*}
-\frac{df(\alpha^i)}{d\alpha} = \sum_{j=1}^d \frac{\partial f(x^i + \alpha^i d^i)}{\partial x_j} \frac{\partial x_j}{\partial \alpha}
+\frac{df(\alpha^i)}{d\alpha} = \sum_{j=1}^n \frac{\partial f(x^i + \alpha^i d^i)}{\partial x_j} \frac{\partial x_j}{\partial \alpha}
 = \grad f(x^{i+1})^\top . d^i = 0
 \end{equation*}
 If the direction is the gradient, 
@@ -641,6 +641,7 @@ If the direction is the gradient,
 \includegraphics[width=\textwidth]{oscillations-crop.pdf} 
 \end{center}
 \end{frame}
+
 
 \section{Improved gradient based searches}
 
@@ -668,10 +669,10 @@ Introduce a momentum (i.e., a memory) in the search step \cite{polyak1964some},
 s^i = -\grad f(x^i) + \beta s^{i-1}
 \end{equation*} 
 where\footnote{alternatively, for iteration varying momentum, $\beta^i=(i-2)/(i+1)$} $\beta = 0.9$.\\
-\vspace{-0.6cm}
+\vspace{-0.2cm}
 \begin{minipage}[c]{0.5\textwidth}
 This should contribute to avoid the oscillations occuring at the botton of valleys.\\
-$s^i$ still a descent direction.
+$s^i$ still a descent direction (assuming perfect line search).
 \end{minipage}
 \begin{minipage}[c]{0.4\textwidth}
 \begin{center}
@@ -771,7 +772,7 @@ approximation to the gradient.
 \begin{equation*}
 \left\{
 \begin{array}{l}
-\min_{x \in \mathcal S} f(x) \quad,\quad \mathcal S = \Rset[d]\\
+\min_{x \in \mathcal S} f(x) \quad,\quad \mathcal S = \Rset[n]\\
 \text{such that  } g_i(x) \le 0 \quad , \quad i=1,m
 \end{array}
 \right.
@@ -781,7 +782,7 @@ approximation to the gradient.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Bound constraints} 
-$\mathcal S$ is an hypercube of $\Rset[d]$, $\mathcal S = [LB,UB] \subset \Rset[d]$.
+$\mathcal S$ is an hypercube of $\Rset[n]$, $\mathcal S = [LB,UB] \subset \Rset[n]$.
 \vskip\baselineskip
 It could be described by constraints, 
 $g_{2i-1}(x) \coloneqq LB_i - x_i \le 0$,
@@ -802,6 +803,7 @@ Exercise: how to code this?
 \\
 {$^a$\small This can even happen for a convex function in a convex $\mathcal S$, as the drawing shows.} 
 \end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
@@ -874,7 +876,7 @@ As $r$ grows, $x_r^\star \rightarrow x^\star$ but the curvature of $f_r()$ incre
 \frametitle{Comments on gradient based descent algorithms} 
 \begin{minipage}[c]{0.5\textwidth}
 Use on nondifferentiable functions: theoretically may converge at a point which is not a minimum even on convex functions (e.g., if an iterate is at a kink). This rarely happens in practice. 
-Try function $f(x) = \sum_{i=1}^d \lvert x_i \rvert$ (``L1norm'') with the code. 
+Try function $f(x) = \sum_{i=1}^n \lvert x_i \rvert$ (``L1norm'') with the code. 
 \end{minipage}
 \begin{minipage}[c]{0.4\textwidth}
 \includegraphics[width=\textwidth]{L1norm_contour-premconv-crop.pdf} 
@@ -890,10 +892,10 @@ Main flaw: gets trapped in local minima.
 \frametitle{Towards ML: regularized quadratic function} 
 Let's consider a function with a relationship to ML:
 \begin{equation}
-f(x) ~=~ \sum_{i=1}^d (x_i-c_i)^2 + \lambda \sum_{i=1}^d \lvert x_i \rvert \quad,\quad \lambda \ge 0
+f(x) ~=~ \sum_{i=1}^n (x_i-c_i)^2 + \lambda \sum_{i=1}^n \lvert x_i \rvert \quad,\quad \lambda \ge 0
 \label{eq:sphereL1}
 \end{equation}
-First term: sphere function centered at $c$, $c_i = i~,~i=1,\ldots,d$. A simplistic model to the mean square error of a NN where $c$ minimizes the training error.\\
+First term: sphere function centered at $c$, $c_i = i~,~i=1,\ldots,n$. A simplistic model to the mean square error of a NN where $c$ minimizes the training error.\\
 Second term: L1 norm times $\lambda$. The $x_i$'s would be the weights of a NN. 
 This term helps in improving the test error.
 Let's see why.
@@ -905,7 +907,7 @@ Let's see why.
 \begin{enumerate}
 \item Program the regularized sphere function (\ref{eq:sphereL1}). 
 \item Minimize it with any version of the previous descent algorithm with a line search in 
-dimension $d=10$ with $\mathcal S = [-5,5]^d$. 
+dimension $n=10$ with $\mathcal S = [-5,5]^n$. 
 Try several values of $\lambda \ge 0$. What do you notice on the solution $x^\star$ found? 
 Why, if the $x$'s were a NN weights, would it improve the generalization ability of the NN?
 \end{enumerate}
@@ -947,7 +949,7 @@ Let's draw the sphere function and the constraint boundary $\lVert x \rVert_1$:
  \includegraphics[height=5cm]{l1sphere_regularization-crop.pdf}
 \end{center}
 It is seen that the solution tends to be at a vertex of the feasible domain, where some of the $x$ components cancel out. 
-This phenomenon occurs more often when $d$ is large and is less obvious for $d=2$. \\
+This phenomenon occurs more often when $n$ is large and is less obvious for $n=2$. \\
 If the $x$'s were a NN weights, setting $x_i$ to 0 is equivalent to cutting the corresponding link, thus reducing the NN capacity, thus making it less prone to overfitting. Finding the best value for $\lambda$ is something of an art.
 \end{enumerate}
 \end{frame}
@@ -1004,7 +1006,7 @@ Execution of the \texttt{restarted\_descent} file. \\
 \frametitle{Application to neural network} 
 \begin{equation*}
 \begin{split}
-& \min_{x \in [LB,UB] \subset \Rset[d]} f_\lambda(x) = f(x) + \lambda \lVert x \rVert_1 \\
+& \min_{x \in [LB,UB] \subset \Rset[n]} f_\lambda(x) = f(x) + \lambda \lVert x \rVert_1 \\
 & \text{ where, for classification, } \\
 & f(x) = - \sum_{i=1}^N \{ t^i \log(y(e^i;x)) + (1-t^i) \log(1 - y(e^i;x))\} \\
 & \text{ and for regression,} \\
@@ -1061,8 +1063,6 @@ a flexible NN with little constraints may be wrong away from the data points.
 When $\lambda$ is large, some weights of the NN cancel out. 
 The number of null weights grows when the size of the training set diminishes.
 \end{frame}
-
-\fi
 
 \section*{Conclusions}
 
