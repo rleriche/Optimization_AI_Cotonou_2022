@@ -17,7 +17,7 @@ import test_functions
 dim = 2
 LB = [-5,-5]
 UB = [5,5]
-fun = test_functions.quadratic
+fun = test_functions.rosen
 
   
 # start drawing the function (necessarily dim==2)
@@ -33,8 +33,8 @@ z = np.apply_along_axis(fun,0,xy)
 figure = plt.figure()
 axis = figure.gca( projection='3d')
 axis.plot_surface(x, y, z, cmap='jet', shade= "false")
-plt.xlabel(xlabel="x")
-plt.ylabel(ylabel="y")
+plt.xlabel(xlabel="x1")
+plt.ylabel(ylabel="x2")
 plt.title(label=fun.__name__)
 axis.set_zlabel("f")
 plt.show()

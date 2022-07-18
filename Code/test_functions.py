@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A set of test functions to play (plot, optimize, ...) with
+A set of test functions to play with (plot, optimize, ...).
+
+    All test functions are defined in arbitrary dimension.
 
 @author: Rodolphe Le Riche
 """
@@ -13,7 +15,7 @@ from numpy import cos
 from numpy import e
 from numpy import pi
 
-
+###########################################
 def ackley(x, a=20, b=0.2, c=2*pi):
     """ Ackley's function. Global optimum at (0,...,0). """
     d=len(x)    
@@ -21,6 +23,7 @@ def ackley(x, a=20, b=0.2, c=2*pi):
     return -a * exp(-b * sqrt((1/d) * np.sum(x**2)))-exp((1/d) * np.sum(cos(c*x))) + e + a
 
         
+###########################################
 def sphere(x):
     """" Sphere function. Global optimum at xstar. """
     d=len(x)
@@ -29,6 +32,7 @@ def sphere(x):
     return np.sum(xx**2)
   
     
+###########################################
 from scipy.linalg import qr
 
 def quadratic(x):
@@ -50,17 +54,32 @@ def quadratic(x):
     if update_H:
         cond_no = 3 #condition number of Hessian
         eigvals = np.diag(np.linspace(1, cond_no,dim))
-        np.random.seed(1)
+        # np.random.seed(1) # to make runs repeatable, 
+        # potentially dangerous so I comment for now
         H = np.random.randn(dim, dim)
         Q, R = qr(H)
+        # Q = np.diag(np.ones(dim)) # to have axes parallel to the coordinates
         __Hmat__ = Q @ eigvals @ Q.T
-    #     print("new hmat")
-    #     print(__Hmat__)     
-    # else:
-    #     print("old H")
-    #     print(__Hmat__)
+
 
     xeff = np.reshape((x - xstar),(dim,1))
     return float(0.5*(xeff.T @ __Hmat__ @ xeff))
 
+###########################################
 
+
+def rosen(x):
+    """
+    Rosenbrock function. Global optimum at (1,...,1)
+    copied and slightly changed from Sonja Surjanovic and Derek Bingham, 
+    Simon Fraser University. 
+    For function details and reference information, see:
+    http://www.sfu.ca/~ssurjano/
+    """
+    dim = len(x)
+    xi = x[0:(dim-1)]
+    xnext=x[1:dim]
+    return np.sum(100*(xnext-xi**2)**2 + (xi-1)**2)
+
+
+ ###########################################   
