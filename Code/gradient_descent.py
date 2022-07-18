@@ -1,3 +1,9 @@
+"""
+    Gradient descent method for optimization
+    
+    @author: Brian Dédji Whannou, Rodolphe Le Riche
+"""
+
 import numpy as np
 
 def linesearch(

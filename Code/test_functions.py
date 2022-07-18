@@ -5,7 +5,7 @@ A set of test functions to play with (plot, optimize, ...).
 
     All test functions are defined in arbitrary dimension.
 
-@author: Rodolphe Le Riche
+@author: Rodolphe Le Riche, Brian Dédji Whannou
 """
 
 import numpy as np

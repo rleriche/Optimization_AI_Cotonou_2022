@@ -5,7 +5,7 @@ Created on Sun Jul 17 12:04:19 2022
 
 3D plots of 2D functions
 
-@author: Rodolphe Le Riche
+@@author: Rodolphe Le Riche, Brian Dédji Whannou
 """
 
 import numpy as np
