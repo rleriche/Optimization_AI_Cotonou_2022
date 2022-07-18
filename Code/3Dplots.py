@@ -9,16 +9,15 @@ Created on Sun Jul 17 12:04:19 2022
 """
 
 import numpy as np
-from numpy import meshgrid
 import matplotlib.pyplot as plt
-from test_functions import ackley
+import test_functions
 
 
 # function definition
 dim = 2
 LB = [-5,-5]
 UB = [5,5]
-fun = ackley
+fun = test_functions.quadratic
 
   
 # start drawing the function (necessarily dim==2)
