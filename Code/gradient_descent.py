@@ -73,12 +73,13 @@ def linesearch(
 def get_gradient(func: object, x: np.array, epsilon: float = 1e-3) -> np.array:
     dimension = len(x)
     gradient = np.zeros(dimension)
+    f_x = func(x)
     for coordinate_index in range(dimension):
         h = np.zeros(dimension)
         h[coordinate_index] = epsilon
         f_xh = func(x + h)
-        f_x = func(x)
         gradient[coordinate_index] = (f_xh - f_x) / epsilon
+
     return gradient
 
 
