@@ -9,7 +9,7 @@ import numpy as np
 from optim_utilities import record_best
 from optim_utilities import record_any
 
-def random_opt(func: object, LB, UB, max_budget: int = 1e3, printlevel = 0):
+def random_opt(func: object, LB, UB, budget: int = 1e3, printlevel = 0):
     if len(LB) != len(UB):
         raise Exception("the bounds should have the same nb of components and it is %d and %d" % (len(LB),len(UB)))
     dim=len(UB)
@@ -30,6 +30,6 @@ def random_opt(func: object, LB, UB, max_budget: int = 1e3, printlevel = 0):
             x_best = xnew
             res = record_best(rec=res, fbest=f_best, xbest=x_best, time=iteration, printlevel=printlevel)
             
-        condition = iteration >= max_budget
+        condition = iteration >= budget
         
     return res

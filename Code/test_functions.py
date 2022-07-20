@@ -25,7 +25,7 @@ def ackley(x, a=20, b=0.2, c=2*pi):
         
 ###########################################
 def sphere(x):
-    """" Sphere function. Global optimum at xstar. """
+    """" Sphere function. Global optimum at xstar = (1,2,...,dim) """
     d=len(x)
     xstar=np.array(range(1,(d+1)))
     xx=x-xstar

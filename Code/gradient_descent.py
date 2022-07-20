@@ -1,11 +1,47 @@
 """
-    Gradient descent method for optimization
+    A collection of descent methods based on gradients for optimization
     
     @author: Brian Dédji Whannou, Rodolphe Le Riche
 """
 
 import numpy as np
+from optim_utilities import record_best
+from optim_utilities import record_any
 
+#%% finite difference function
+def get_gradient(func: object, x: np.array, epsilon: float = 1e-7) -> np.array:
+    """
+    gradient estimation by forward finite difference
+
+    Parameters
+    ----------
+    func : object
+        function.
+    x : np.array
+        point where the gradient is approximated.
+    epsilon : float, optional
+        size of the forward perturbation. The default is 1e-7.
+
+    Returns
+    -------
+    gradient : 1D np.array
+        estimate of the 1D gradient of the partial derivatives at x.
+
+    """
+    dimension = len(x)
+    gradient = np.zeros(dimension)
+    f_x = func(x)
+    for coordinate_index in range(dimension):
+        h = np.zeros(dimension)
+        h[coordinate_index] = epsilon
+        f_xh = func(x + h)
+        gradient[coordinate_index] = (f_xh - f_x) / epsilon
+
+    return gradient
+
+
+
+#%% line search . TODO : contains undefined functions
 def linesearch(
     position: np.array,
     func: object,
@@ -36,7 +72,7 @@ def linesearch(
         )
 
     gradf = get_gradient(func=func, x=position)
-    func_value_at_position = func(x)
+    func_value_at_position = func(position)
     size_of_domain = np.linalg.norm(UB - LB)
     normGrad = np.linalg.norm(gradf)
 
@@ -76,21 +112,69 @@ def linesearch(
     return stepSize
 
 
-def get_gradient(func: object, x: np.array, epsilon: float = 1e-3) -> np.array:
-    dimension = len(x)
-    gradient = np.zeros(dimension)
-    f_x = func(x)
-    for coordinate_index in range(dimension):
-        h = np.zeros(dimension)
-        h[coordinate_index] = epsilon
-        f_xh = func(x + h)
-        gradient[coordinate_index] = (f_xh - f_x) / epsilon
+#%% new version, work in progress. TODO : bounds, line search, momentum, NAG
+def gradient_descent(
+    func: object,
+    start_x: np.array,
+    LB: np.array,
+    UB: np.array,
+    step_factor: float = 1e-1,
+    do_linesearch : bool = False,
+    min_step_size: float = 1e-11,
+    min_grad_size: float = 1e-6,
+    budget: int = 1e3,
+    printlevel: int = 1
+) -> dict:
+    """ A collection of descent algorithms that use gradients """
 
-    return gradient
+    # initializations
+    iteration = 0
+    best_f = float("inf")
+    best_x = start_x
+    current_x = start_x
+    res = {} # results dictionary
+    condition = False
+
+    # start search
+    while not condition:
+        # calculate f and its gradient
+        current_f = func(current_x) 
+        current_gradient = get_gradient(func, current_x)
+        # book-keeping
+        iteration += 1
+        res = record_any(rec=res, f=current_f, x=current_x, time=iteration, printlevel=printlevel)
+        if current_f < best_f:
+            best_x = current_x
+            best_f = current_f
+            res = record_best(rec=res, fbest=best_f, xbest=best_x, time=iteration, printlevel=printlevel)
+
+        # calculate new x position
+        gradient_size = np.linalg.norm(current_gradient)
+        direction = -current_gradient / gradient_size
+        previous_x = current_x
+        delta_x = step_factor * direction * gradient_size
+        current_x = previous_x + delta_x
+
+        # check stopping conditions
+        condition_iteration = iteration >= budget
+        condition_step = np.linalg.norm(delta_x) <= min_step_size
+        condition_gradient = np.linalg.norm(gradient_size) <= min_grad_size
+        condition = condition_iteration or condition_step or condition_gradient
+        
+    stop_condition = str()
+    if condition_iteration:
+        stop_condition += "budget exhausted "
+    if condition_step:
+        stop_condition += "too small step "
+    if condition_gradient:
+        stop_condition += "too small gradient"
+    res["stop_condition"] = stop_condition
+    return res
 
 
 
 
+#%% initial version, serves as template
 def get_optima_steepest_descent(
     func: object,
     start_position: np.array,
@@ -133,3 +217,5 @@ def get_optima_steepest_descent(
         condition_gradient = np.linalg.norm(gradient_size) <= min_grad_size
         condition = condition_iteration or condition_step or condition_gradient
     return position_best_so_far, func_value_best_so_far
+
+

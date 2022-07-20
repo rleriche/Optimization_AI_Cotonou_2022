@@ -32,21 +32,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 import test_functions
 from random_search import random_opt
+from gradient_descent import gradient_descent
 
+#########################
 # function definition
 dim = 2
 LB = [-5,-5]
 UB = [5,5]
-fun = test_functions.quadratic
+fun = test_functions.ackley
+start_x = np.array([-3,-4])
 
 #########################
 # algorithms settings
-budgetMax = 100
+budget = 100
 printlevel = 2  # =0,1,2
 
 #########################
 # optimize
-res = random_opt(func=fun, LB=LB, UB=UB, max_budget=budgetMax, printlevel=printlevel)
+# res = random_opt(func=fun, LB=LB, UB=UB, budget=budget, printlevel=printlevel)
+res = gradient_descent(func=fun,start_x=start_x, LB=LB,UB=UB,step_factor=0.1,
+    do_linesearch=False,min_step_size=1e-11,min_grad_size=1e-6,
+    budget=budget,printlevel=printlevel)
 
 #########################
 # reporting
@@ -71,7 +77,10 @@ if printlevel > 0:
         xy = np.array([x,y])
         z = np.apply_along_axis(fun,0,xy)
         fig2, ax2 = plt.subplots()
-        fquant = np.quantile(a=res["hist_f_best"],q=[0,0.05,0.1,0.2,0.5,0.7,1])
+        # fquant = np.quantile(a=res["hist_f_best"],q=[0,0.05,0.1,0.2,0.5,0.7,1])
+        fmin = min(res["hist_f_best"])
+        fmax = max(res["hist_f_best"])
+        fquant = fmin + (np.linspace(start=0,stop=1,num=10)**2)*(fmax-fmin)        
         CS = ax2.contour(x,y,z,levels=fquant)
         ax2.clabel(CS, inline=True, fontsize=10)
         # add history of best points onto it
