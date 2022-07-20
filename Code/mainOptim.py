@@ -13,10 +13,15 @@ Parameters
     The optimization results are dictionaries with the following key-value pairs:
         "f_best", float : best ojective function found during the search
         "x_best", 1D array : best point found 
-        "hist_f_best", list(float) : history of best so far objective functions
-        "hist_time_best", list(int) : times of recordings of new best so far
-        "hist_x_best", 2D array : history of best so far points as a matrix, each x is a row
-
+        "time_used" , int : time actually used by search (may be smaller than max budget)
+        if printlevel > 0 :
+            "hist_f_best", list(float) : history of best so far objective functions
+            "hist_time_best", list(int) : times of recordings of new best so far
+            "hist_x_best", 2D array : history of best so far points as a matrix, each x is a row
+        if printlevel > 1 :
+        "hist_f", list(float) : all f's calculated
+        "hist_x", 2D array : all x's calculated
+        "hist_time", list(int) : times of recording of full history
 
         
 
@@ -32,12 +37,12 @@ from random_search import random_opt
 dim = 2
 LB = [-5,-5]
 UB = [5,5]
-fun = test_functions.rosen
+fun = test_functions.quadratic
 
 #########################
 # algorithms settings
 budgetMax = 100
-printlevel = 1
+printlevel = 2  # =0,1,2
 
 #########################
 # optimize
@@ -45,12 +50,17 @@ res = random_opt(func=fun, LB=LB, UB=UB, max_budget=budgetMax, printlevel=printl
 
 #########################
 # reporting
+print("search stopped after %d evaluations of f" % res["time_used"])
 print("best objective function =",res["f_best"])
 print("best x =", res["x_best"])
 if printlevel > 0:
     fig1, ax1 = plt.subplots()
     plt.yscale("log")
-    ax1.plot(res["hist_time_best"],res["hist_f_best"])
+    ax1.plot((res["hist_time_best"]+ [res["time_used"]]) , (res["hist_f_best"] + [res["f_best"]]))
+    ax1.set_xlabel("no. calls to f")
+    ax1.set_ylabel("f")
+    if printlevel > 1:
+        ax1.plot(res["hist_time"],res["hist_f"])
     if dim == 2: 
         # 2D contour plot 
         # start drawing the function (necessarily dim==2)
@@ -65,4 +75,7 @@ if printlevel > 0:
         CS = ax2.contour(x,y,z,levels=fquant)
         ax2.clabel(CS, inline=True, fontsize=10)
         # add history of best points onto it
-        ax2.plot(res["hist_x_best"][:,0],res["hist_x_best"][:,1],"ob",markersize=3)
+        if printlevel > 1:
+            ax2.plot(res["hist_x"][:,0],res["hist_x"][:,1],"ob",markersize=3)
+        ax2.plot(res["hist_x_best"][:,0],res["hist_x_best"][:,1],"or",markersize=4)
+        
