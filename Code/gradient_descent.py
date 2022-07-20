@@ -112,7 +112,7 @@ def linesearch(
     return stepSize
 
 
-#%% new version, work in progress. TODO : bounds, line search, momentum, NAG
+#%% new version, work in progress. TODO : line search, momentum, NAG
 def gradient_descent(
     func: object,
     start_x: np.array,
@@ -154,10 +154,12 @@ def gradient_descent(
         previous_x = current_x
         delta_x = step_factor * direction * gradient_size
         current_x = previous_x + delta_x
+        # project point in-bounds
+        current_x = np.where(current_x<LB,LB,np.where(current_x>UB,UB,current_x))
 
         # check stopping conditions
         condition_iteration = iteration >= budget
-        condition_step = np.linalg.norm(delta_x) <= min_step_size
+        condition_step = np.linalg.norm(current_x-previous_x) <= min_step_size
         condition_gradient = np.linalg.norm(gradient_size) <= min_grad_size
         condition = condition_iteration or condition_step or condition_gradient
         

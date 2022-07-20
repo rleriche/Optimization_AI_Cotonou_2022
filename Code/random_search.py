@@ -31,5 +31,6 @@ def random_opt(func: object, LB, UB, budget: int = 1e3, printlevel = 0):
             res = record_best(rec=res, fbest=f_best, xbest=x_best, time=iteration, printlevel=printlevel)
             
         condition = iteration >= budget
-        
+    
+    res["stop_condition"] = "budget exhausted "
     return res

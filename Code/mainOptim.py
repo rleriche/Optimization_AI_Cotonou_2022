@@ -13,6 +13,7 @@ Parameters
     The optimization results are dictionaries with the following key-value pairs:
         "f_best", float : best ojective function found during the search
         "x_best", 1D array : best point found 
+        "stop_condition" : str describing why the search stopped
         "time_used" , int : time actually used by search (may be smaller than max budget)
         if printlevel > 0 :
             "hist_f_best", list(float) : history of best so far objective functions
@@ -39,7 +40,7 @@ from gradient_descent import gradient_descent
 dim = 2
 LB = [-5,-5]
 UB = [5,5]
-fun = test_functions.ackley
+fun = test_functions.quadratic
 start_x = np.array([-3,-4])
 
 #########################
