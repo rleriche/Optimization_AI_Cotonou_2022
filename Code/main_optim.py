@@ -38,27 +38,32 @@ from gradient_descent import gradient_descent
 
 #########################
 # function definition
-dim = 3
-LB = [-5,-5,-5]
-UB = [5,5,5]
-fun = test_functions.rosen
-start_x = np.array([-3,-4,-2.5])
+fun = test_functions.quadratic
+LB = [-5] * 10
+UB = [5] * 10
+dim = len(LB)
+np.random.seed(123) # useful for repeated runs (quadratic fct or initial random point)
 
 #########################
 # algorithms settings
-budget = 100*(dim+1)
-printlevel = 2  # =0,1,2
+start_x = (1+np.arange(dim))*5/dim
+# start_x = np.array([4,4,4,4,4])
+# start_x = np.random.uniform(low=LB,high=UB)
+
+budget = 1000*(dim+1)
+printlevel = 1  # =0,1,2
 
 #########################
 # optimize
 # res = random_opt(func=fun, LB=LB, UB=UB, budget=budget, printlevel=printlevel)
 res = gradient_descent(func=fun,start_x=start_x, LB=LB,UB=UB,budget=budget,
-                       step_factor=0.1,do_linesearch=True,min_step_size=1e-11,
-                       min_grad_size=1e-6,printlevel=printlevel)
+                       step_factor=0.1,direction_type="momentum",
+                       do_linesearch=True,min_step_size=1e-11,
+                       min_grad_size=1e-6,inertia=0.9,printlevel=printlevel)
 
 #########################
 # reporting
-print("search stopped after %d evaluations of f" % res["time_used"])
+print(f'search stopped after {res["time_used"]} evaluations of f because of {res["stop_condition"]}')
 print("best objective function =",res["f_best"])
 print("best x =", res["x_best"])
 if printlevel > 0:

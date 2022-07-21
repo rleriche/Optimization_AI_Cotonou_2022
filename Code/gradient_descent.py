@@ -163,9 +163,11 @@ def gradient_descent(
     UB: np.array,
     budget: int = 1e3,
     step_factor: float = 1e-1,
+    direction_type: str = "momentum",
     do_linesearch : bool = False,
     min_step_size: float = 1e-11,
     min_grad_size: float = 1e-6,
+    inertia : float = 0.9,
     printlevel: int = 1
 ) -> dict:
     """ A collection of descent algorithms that use gradients """
@@ -183,6 +185,7 @@ def gradient_descent(
     current_x = start_x
     res = {} # results dictionary
     condition = False
+    previous_step = np.zeros(dim)
 
     # start search
     while not condition:
@@ -199,10 +202,25 @@ def gradient_descent(
             best_f = current_f
             res = record_best(rec=res, fbest=best_f, xbest=best_x, time=nb_fun_calls, printlevel=printlevel)
 
-        # calculate new x position
+        # determine search direction
         gradient_size = np.linalg.norm(current_gradient)
-        direction = -current_gradient / gradient_size
         previous_x = current_x
+
+        if direction_type == "gradient":
+            delta_x = - step_factor * current_gradient            
+        elif direction_type == "momentum":
+            if iteration <= 1:
+                delta_x = - step_factor * current_gradient           
+            else:
+                delta_x = - step_factor * current_gradient + inertia * previous_step
+        elif direction_type == "NAG":
+            raise ValueError("NAG not yet implemented as search direction")                
+        else:
+            raise ValueError("unknown direction_type "+direction_type)
+        
+        direction = delta_x / np.linalg.norm(delta_x)
+                
+        # step in direction, with or without line search, to get new x
         if do_linesearch:
             current_x,linesearch_cost,res = linesearch(x=current_x,f_x=current_f, 
                                                    gradf=current_gradient, 
@@ -213,11 +231,13 @@ def gradient_descent(
             # linesearch is repeated in func(current_x) above but not 
             # accounted for in linesearch_cost
             nb_fun_calls += linesearch_cost
+            delta_x = current_x - previous_x
         else:
-            delta_x = step_factor * direction * gradient_size
             current_x = previous_x + delta_x
             # project point in-bounds
             current_x = np.where(current_x<LB,LB,np.where(current_x>UB,UB,current_x))
+
+        previous_step = delta_x
 
         # check stopping conditions
         condition_iteration = nb_fun_calls >= budget
