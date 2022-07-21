@@ -34,10 +34,7 @@ def record_best(rec : dict, fbest : float, xbest : np.array, time: int, printlev
 
 def record_any(rec : dict, f : float, x : np.array, time: int, printlevel: int) -> dict:
     """ create and update record of any point during the search """
-    if "time_used" not in rec:
-        rec["time_used"]=1
-    else:
-        rec["time_used"]+=1
+    rec["time_used"]=time
     if printlevel > 1:
         rec = record_hist(rec=rec,f=f,x=x,time=time,
                           key_f="hist_f",key_x="hist_x",key_time="hist_time")

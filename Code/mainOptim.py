@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#%% main . TODO : documentation of module and update README
 """
 Main script for testing optimizers
 
@@ -37,23 +38,23 @@ from gradient_descent import gradient_descent
 
 #########################
 # function definition
-dim = 2
-LB = [-5,-5]
-UB = [5,5]
-fun = test_functions.quadratic
-start_x = np.array([-3,-4])
+dim = 3
+LB = [-5,-5,-5]
+UB = [5,5,5]
+fun = test_functions.rosen
+start_x = np.array([-3,-4,-2.5])
 
 #########################
 # algorithms settings
-budget = 100
+budget = 100*(dim+1)
 printlevel = 2  # =0,1,2
 
 #########################
 # optimize
 # res = random_opt(func=fun, LB=LB, UB=UB, budget=budget, printlevel=printlevel)
-res = gradient_descent(func=fun,start_x=start_x, LB=LB,UB=UB,step_factor=0.1,
-    do_linesearch=False,min_step_size=1e-11,min_grad_size=1e-6,
-    budget=budget,printlevel=printlevel)
+res = gradient_descent(func=fun,start_x=start_x, LB=LB,UB=UB,budget=budget,
+                       step_factor=0.1,do_linesearch=True,min_step_size=1e-11,
+                       min_grad_size=1e-6,printlevel=printlevel)
 
 #########################
 # reporting

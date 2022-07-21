@@ -1,7 +1,7 @@
 """
     A collection of descent methods based on gradients for optimization
     
-    @author: Brian Dédji Whannou, Rodolphe Le Riche
+    @author: Rodolphe Le Riche, Brian Dédji Whannou
 """
 
 import numpy as np
@@ -9,9 +9,11 @@ from optim_utilities import record_best
 from optim_utilities import record_any
 
 #%% finite difference function
-def get_gradient(func: object, x: np.array, epsilon: float = 1e-7) -> np.array:
+def gradient_finite_diff(func: object, x: np.array, f_x: float, epsilon: float = 1e-7) -> np.array:
     """
-    gradient estimation by forward finite difference
+    Gradient estimation by forward finite difference
+
+    Costs len(x) calls to func
 
     Parameters
     ----------
@@ -19,6 +21,8 @@ def get_gradient(func: object, x: np.array, epsilon: float = 1e-7) -> np.array:
         function.
     x : np.array
         point where the gradient is approximated.
+    f_x : float
+            function value at x.
     epsilon : float, optional
         size of the forward perturbation. The default is 1e-7.
 
@@ -30,7 +34,6 @@ def get_gradient(func: object, x: np.array, epsilon: float = 1e-7) -> np.array:
     """
     dimension = len(x)
     gradient = np.zeros(dimension)
-    f_x = func(x)
     for coordinate_index in range(dimension):
         h = np.zeros(dimension)
         h[coordinate_index] = epsilon
@@ -40,95 +43,141 @@ def get_gradient(func: object, x: np.array, epsilon: float = 1e-7) -> np.array:
     return gradient
 
 
-
-#%% line search . TODO : contains undefined functions
+#%% line search
 def linesearch(
-    position: np.array,
-    func: object,
+    x: np.array,
+    f_x : float,
+    gradf: np.array,
     direction: np.array,
-    LB: np.array,
-    UB: np.array,
-    maxloop=100,
+    func: object,
+    LB: list,
+    UB: list,
+    rec : dict,
+    printlevel : int,
     suffDecFact=0.1,
     decFact=0.5,
-    initStepFact=1,
-):
-
+    initStepFact=1):
     """
-    position : current point
-    direction : direction in which to search.
-    suffDecFact : scalar in [0,1[  used in the sufficient decrease test,
-      i.e. how much better than Taylor is demanded.
-    decFact : scalar in ]0,1[ , used to reduce stepSize
-    initStepFact : multiplicative factor of gradient norm to determine initial stepSize
-    LB,UB : d-dimensional vectors of lower and upper bounds for the variables
-    """
-    if len(LB) != len(position) or len(UB) != len(position):
-        raise ValueError("the bounds should have %s components" % len(position))
+    line search function
 
+    Backtracking with Armijo (sufficient decrease) condition
+    find stepSize that satisfies : 
+        f(x+stepSize*direction) <= f(x) + stepSize* (suffDecFact * direction^T*gradf)
+    If direction is not a descent direction ( direction^T*gradf>0 ), 
+        turn around (multiply direction by -1).
+
+    Parameters
+    ----------
+    x : np.array
+        current point.
+    f_x : float
+        objective function at x.
+    gradf : np.array
+        gradient of f at x.
+    direction : np.array
+        proposed search direction. Not necessarily a descent direction 
+        (hence works with momentum and NAG).
+    func : object
+        pointer to objective function.
+    LB : list
+        lower bounds on x.
+    UB : list
+        upper bounds on x.
+    rec : dict
+        recording of points tried.
+    printlevel : int
+        recording level, =0,1 or more (cf general documentation).
+    suffDecFact : TYPE, optional
+        sufficient decrease factor, in [0,1[. The default is 0.1.
+    decFact : TYPE, optional
+        step size decrease factor, in ]0,1[. The default is 0.5.
+    initStepFact : TYPE, optional
+        initial step factor, gets multiplied by gradient norm to determine
+        initial step size. The default is 1.
+
+    Raises
+    ------
+    ValueError
+        some input checking.
+
+    Returns
+    -------
+    next_x : np.array
+        next point found.
+    n_loop-1
+        cost of line search.
+    rec : dict
+        updated dictionary of records.
+
+    """   
+    
     if not 0 <= suffDecFact < 1:
         raise ValueError(
             "the sufficient decrease factor (suffDecFact) should be between 0 and (strictly) 1"
         )
-
-    gradf = get_gradient(func=func, x=position)
-    func_value_at_position = func(position)
-    size_of_domain = np.linalg.norm(UB - LB)
+    
     normGrad = np.linalg.norm(gradf)
-
+    size_of_domain = np.linalg.norm(np.array([UB]) - np.array([LB]))
+    # calculate initial stepSize
+    # either as initStepFact*norm of gradient (but this may fail in flat regions)
+    # or as a fraction of domain diagonal. Take the max of both initial step sizes.
     stepSize = max(initStepFact * normGrad, (size_of_domain / 100))
     gradient_projected_on_direction = direction.dot(gradf)
-
-    if gradient_projected_on_direction > 0:
+    # if direction is not a descent direction, -direction is, turn around
+    if gradient_projected_on_direction>0:
         direction = -direction
-        gradient_projected_on_direction = -gradient_projected_on_direction
-
+        gradient_projected_on_direction <- -gradient_projected_on_direction
+ 
     n_loop = 0
+    maxloop=100 # max line search budget
 
     condition = False
-
+    
     while not condition:
-        next_position = position + stepSize * direction
-
-        lower_bound_violated = LB > next_position
-        upper_bound_violated = next_position < UB
-
-        # coordinates should be inside the domaine
-        next_position_inbounds = (
-            upper_bound_violated * UB
-            + (1 - lower_bound_violated) * (1 - upper_bound_violated) * next_position
-            + lower_bound_violated * LB
-        )
-
-        if np.linalg.norm(next_position_inbounds - next_position) < 10e-10:
-            func_value_at_position = func(next_position_in_bound)
+        next_x = x + stepSize * direction
+        # coordinates should be inside the domain
+        next_x_inbounds = np.where(next_x<LB,LB,np.where(next_x>UB,UB,next_x))
+        # only evaluate next_x if it is in-bounds, otherwise decrease step size
+        if np.linalg.norm(next_x_inbounds - next_x) < 10e-10:
+            f_next = func(next_x_inbounds)
             n_loop += 1
+            rec = record_any(rec=rec, f=f_next, x=next_x_inbounds, time=(rec["time_used"]+1), printlevel=printlevel)
+        else:
+            f_next = float("inf")
+
+        condition_loop = (n_loop >= maxloop)
+        condition_decrease = (f_next < (f_x + suffDecFact * stepSize * 
+                                        gradient_projected_on_direction))
+        condition = condition_loop or condition_decrease
         stepSize = decFact * stepSize
-
-        condition = n_loop > maxloop or func_value_at_position < (
-            func(position) + suffDecFact * stepSize * np.vdot(gradient_f_i.T, direction)
-        )
-
-    return stepSize
+     
+    return next_x, (n_loop-1), rec
 
 
-#%% new version, work in progress. TODO : line search, momentum, NAG
+
+#%% gradient-based descent algos, work in progress. TODO : momentum, NAG, better documentation
 def gradient_descent(
     func: object,
     start_x: np.array,
     LB: np.array,
     UB: np.array,
+    budget: int = 1e3,
     step_factor: float = 1e-1,
     do_linesearch : bool = False,
     min_step_size: float = 1e-11,
     min_grad_size: float = 1e-6,
-    budget: int = 1e3,
     printlevel: int = 1
 ) -> dict:
     """ A collection of descent algorithms that use gradients """
-
+    
+    if len(LB) != len(start_x) or len(UB) != len(start_x):
+        raise ValueError("inconsistent size of LB, %s, UB, %s, and start_x, %s" % 
+                         len(LB),len(UB),len(start_x))
+        
     # initializations
+    dim = len(start_x)
     iteration = 0
+    nb_fun_calls = 0
     best_f = float("inf")
     best_x = start_x
     current_x = start_x
@@ -139,26 +188,39 @@ def gradient_descent(
     while not condition:
         # calculate f and its gradient
         current_f = func(current_x) 
-        current_gradient = get_gradient(func, current_x)
+        nb_fun_calls += 1
+        current_gradient = gradient_finite_diff(func, current_x, current_f)
+        nb_fun_calls += dim # cost of the forward finite difference such as implemented
         # book-keeping
         iteration += 1
-        res = record_any(rec=res, f=current_f, x=current_x, time=iteration, printlevel=printlevel)
+        res = record_any(rec=res, f=current_f, x=current_x, time=nb_fun_calls, printlevel=printlevel)
         if current_f < best_f:
             best_x = current_x
             best_f = current_f
-            res = record_best(rec=res, fbest=best_f, xbest=best_x, time=iteration, printlevel=printlevel)
+            res = record_best(rec=res, fbest=best_f, xbest=best_x, time=nb_fun_calls, printlevel=printlevel)
 
         # calculate new x position
         gradient_size = np.linalg.norm(current_gradient)
         direction = -current_gradient / gradient_size
         previous_x = current_x
-        delta_x = step_factor * direction * gradient_size
-        current_x = previous_x + delta_x
-        # project point in-bounds
-        current_x = np.where(current_x<LB,LB,np.where(current_x>UB,UB,current_x))
+        if do_linesearch:
+            current_x,linesearch_cost,res = linesearch(x=current_x,f_x=current_f, 
+                                                   gradf=current_gradient, 
+                                                   direction=direction, 
+                                                   func=func, LB=LB, UB=UB,
+                                                   rec=res,printlevel=printlevel)
+            # for code simplicity, the last function evaluation done in 
+            # linesearch is repeated in func(current_x) above but not 
+            # accounted for in linesearch_cost
+            nb_fun_calls += linesearch_cost
+        else:
+            delta_x = step_factor * direction * gradient_size
+            current_x = previous_x + delta_x
+            # project point in-bounds
+            current_x = np.where(current_x<LB,LB,np.where(current_x>UB,UB,current_x))
 
         # check stopping conditions
-        condition_iteration = iteration >= budget
+        condition_iteration = nb_fun_calls >= budget
         condition_step = np.linalg.norm(current_x-previous_x) <= min_step_size
         condition_gradient = np.linalg.norm(gradient_size) <= min_grad_size
         condition = condition_iteration or condition_step or condition_gradient
@@ -173,51 +235,5 @@ def gradient_descent(
     res["stop_condition"] = stop_condition
     return res
 
-
-
-
-#%% initial version, serves as template
-def get_optima_steepest_descent(
-    func: object,
-    start_position: np.array,
-    LB,
-    UB,
-    learning_rate: float = 1e-1,
-    linesearch_type=False,
-    min_step_size: float = 1e-5,
-    min_grad_size: float = 1e-5,
-    n_iterations: int = 1e3,
-    max_double: float = 1e12,
-):
-    iteration = 0
-    func_value_best_so_far = max_double
-    position_best_so_far = start_position
-    current_position = start_position
-    condition = False
-    while not condition:
-        func_value_at_current_position = func(current_position)
-        if func_value_at_current_position < func_value_best_so_far:
-            position_best_so_far = current_position
-            func_value_best_so_far = func_value_at_current_position
-        gradient_at_current_position = get_gradient(func, current_position)
-        gradient_size = np.linalg.norm(gradient_at_current_position)
-        direction_at_current_position = -gradient_at_current_position / gradient_size
-        previous_position = current_position
-        if linesearch_type:
-            learning_rate = linesearch(
-                position=current_position,
-                func=func,
-                direction=direction_at_current_position,
-                LB=LB,
-                UB=UB,
-            )
-        delta_position = learning_rate * direction_at_current_position * gradient_size
-        current_position = previous_position + delta_position
-        iteration += 1
-        condition_iteration = iteration > n_iterations
-        condition_step = np.linalg.norm(delta_position) <= min_step_size
-        condition_gradient = np.linalg.norm(gradient_size) <= min_grad_size
-        condition = condition_iteration or condition_step or condition_gradient
-    return position_best_so_far, func_value_best_so_far
 
 
