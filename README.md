@@ -20,3 +20,6 @@ Rodolphe Le Riche. Optimization for quantitative decisions: a versatile multi-ta
 
 Slides of the course entitled "An introduction to optimization for machine learning".
 
+### Code
+
+Code in python

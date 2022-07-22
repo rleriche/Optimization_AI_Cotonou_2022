@@ -47,11 +47,11 @@ np.random.seed(123) # useful for repeated runs (quadratic fct or initial random 
 #########################
 # algorithms settings
 start_x = (1+np.arange(dim))*5/dim
-# start_x = np.array([4,4,4,4,4])
+# start_x = np.array([4,4])
 # start_x = np.random.uniform(low=LB,high=UB)
 
 budget = 1000*(dim+1)
-printlevel = 1  # =0,1,2
+printlevel = 1  # =0,1,2 , careful with 2 which is memory consuming
 
 #########################
 # optimize

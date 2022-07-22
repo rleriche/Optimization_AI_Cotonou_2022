@@ -65,6 +65,9 @@ def linesearch(
         f(x+stepSize*direction) <= f(x) + stepSize* (suffDecFact * direction^T*gradf)
     If direction is not a descent direction ( direction^T*gradf>0 ), 
         turn around (multiply direction by -1).
+    In addition we return the stepSize that corresponds to the best function 
+        tried during the line search which improves the global search 
+        capacities of the optimizer.
 
     Parameters
     ----------
@@ -130,6 +133,9 @@ def linesearch(
  
     n_loop = 0
     maxloop=100 # max line search budget
+    
+    f_ls_best = float("inf")
+    x_ls_best = x * np.NaN
 
     condition = False
     
@@ -142,6 +148,9 @@ def linesearch(
             f_next = func(next_x_inbounds)
             n_loop += 1
             rec = record_any(rec=rec, f=f_next, x=next_x_inbounds, time=(rec["time_used"]+1), printlevel=printlevel)
+            if f_next < f_ls_best: # record best of linesearch
+                x_ls_best = next_x_inbounds
+                f_ls_best = f_next
         else:
             f_next = float("inf")
 
@@ -151,11 +160,19 @@ def linesearch(
         condition = condition_loop or condition_decrease
         stepSize = decFact * stepSize
      
-    return next_x, (n_loop-1), rec
+    # return global best of line search : this part makes the optimizer
+    # global. Remove it to return to a classical local search (that gets 
+    # trapped in local optima)
+    if f_ls_best<f_next:
+        next_x_inbounds = x_ls_best
+        f_next = f_ls_best
+
+        
+    return next_x_inbounds, (n_loop-1), rec
 
 
 
-#%% gradient-based descent algos, work in progress. TODO : momentum, NAG, better documentation
+#%% gradient-based descent algos, work in progress. TODO : NAG, better documentation
 def gradient_descent(
     func: object,
     start_x: np.array,
@@ -217,6 +234,11 @@ def gradient_descent(
             raise ValueError("NAG not yet implemented as search direction")                
         else:
             raise ValueError("unknown direction_type "+direction_type)
+        
+        # if the current point is near a boundary, the direction should be projected on that boundary
+        tol = 1.e-15
+        violation = np.where(current_x>(np.array(LB)+tol),0,-1)+np.where(current_x<(np.array(UB)-tol),0,1)
+        delta_x[np.where(violation*delta_x>0)]=0        
         
         direction = delta_x / np.linalg.norm(delta_x)
                 
