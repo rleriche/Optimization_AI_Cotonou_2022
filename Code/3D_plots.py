@@ -17,7 +17,7 @@ import test_functions
 dim = 2
 LB = [-5,-5]
 UB = [5,5]
-fun = test_functions.rosen
+fun = test_functions.sphereL1
 
   
 # start drawing the function (necessarily dim==2)

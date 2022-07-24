@@ -81,5 +81,46 @@ def rosen(x):
     xnext=x[1:dim]
     return np.sum(100*(xnext-xi**2)**2 + (xi-1)**2)
 
+###########################################
 
- ###########################################   
+def L1norm(x):
+    """
+    non differentiable and convex L1 norm
+    useful for regularization
+
+    Parameters
+    ----------
+    x : np.array
+        vector of inputs
+
+    Returns
+    -------
+    float
+        sum_i(abs(x_i))
+
+    """
+    return np.sum(np.abs(x))
+
+
+###########################################
+
+def sphereL1(x: np.array) -> float:
+    """
+    Regularized sphere function
+
+    Parameters
+    ----------
+    x : np.array
+        vector of input variables.
+
+    Returns
+    -------
+    float
+        sphere(x)+lbda*L1norm(x).
+
+    """    
+    lbda = 10
+    return sphere(x) + lbda*L1norm(x)
+
+
+
