@@ -24,6 +24,7 @@
 \usepackage{bbm}
 \usepackage{textcomp}
 \usepackage{yfonts}
+\usepackage{ulem}
 
 \usepackage{tikz}
 \usetikzlibrary{calc,shapes,arrows}
@@ -65,7 +66,7 @@ In this talk, we look into the history of the new scientific objects that are th
 The point-of-view is historical and philosophical rather than mathematical.
 It is explained how the conditions for the emergence of the optimizers as new scientific objects correspond to a state of sufficient knowledge decomposition. 
 The versatility of optimizers is illustrated through examples.
-Although they are just tools, optimizers are a source a fascination because they guide through a space of representations in a process that resembles learning. 
+Although they are just tools, optimizers are a source of fascination because they guide through a space of representations in a process that resembles learning. 
 But rationality is bounded and, in that sense, optimization problems are utopias: they are an over-simplification of decisions which are actually rooted in human relationships; they often cannot be solved because the computational capacities are limited.  
 The presentation finishes with some contemporary challenges in optimization.
 }
@@ -104,13 +105,13 @@ The presentation finishes with some contemporary challenges in optimization.
 \end{minipage} 
 \begin{minipage}[t]{0.2\textwidth}
 \centering
-\textbf{\textcolor{red}{algorithms}} + 
+\textbf{\textcolor{red}{algorithms}}
 \\
 \includegraphics[width=0.5\textwidth]{Figures/algorithm.png} 
 \end{minipage} 
 \begin{minipage}[t]{0.2\textwidth}
 \centering
-data + 
++ data + 
 \\\vskip 0.2cm
 \includegraphics[width=\textwidth]{Figures/data.png} 
 \end{minipage} 
@@ -229,8 +230,8 @@ Optimization is a way of mathematically modeling decision.
 \end{equation*}
 \begin{itemize}
 \item $x$ vector of decision parameters (variables)~: dimensions, investment, tuning of a machine / program, \ldots
-\item $f(x)$~: decision cost, minus $\times$ performance, \ldots 
-\item $\mathcal S$~: set of possible values for $x$, search space
+\item $f(x)$~: decision cost, -1 $\times$ performance, \\-1 $\times$ utility \ldots 
+\item $\mathcal S$~: set of possible values for $x$, search space, representation space 
 \end{itemize}
 \end{minipage}
 } % end mbox
@@ -274,7 +275,7 @@ At the minimum, the design is ``optimal''.
 {\footnotesize
 {\normalsize $x$:} The blades are described by 4 cross-sections for a total of 20 design parameters. 
 \\
-{\normalsize $f()$:} 5 constraints about the inlet and outlet relative flow angles, the flow speed reduction, excessive loading and the Mach number of the blade tips.
+{\normalsize $f(m())$:} $m(x)$ model solving partial differential equations, $f()$ made of 5 constraints about the inlet and outlet relative flow angles, the flow speed reduction, excessive loading and the Mach number of the blade tips.
 The objective function is the polytropic (compressor) efficiency. From \cite{roustant:hal-03217277}.
 }
 \vskip\baselineskip
@@ -289,23 +290,10 @@ Favorable application: non-intuitive design and a small gain makes a large diffe
 \end{center}
 $x$ is the orientation of the fibers within the plies of a composite laminate and the location where the plies are dropped.
 \\
-$f()$ mechanical performance (stiffness, low mass, strength, stability, \ldots)
+$f(m())$ mechanical performance (stiffness, low mass, strength, stability, \ldots)
 \\
 Many arrangements of the $x$'s have almost equivalent performances, leading to local optima
 (from \cite{irisarri2014optimal}).
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-\frametitle{Optimization example: model identification}
-\begin{center}
-\includegraphics[width=0.7\textwidth]{piton_fournaise.jpg}\\
-\vspace{-1cm}
-{\hfill\tiny (from \cite{fukushima2010evolution})}
-\end{center}
-$x$ = dike position, geometry, internal pressure\\
-$f()$ = distance between measures (from RADARSAT-1 satellite) and model (boundary elements, non trivial computation)\\
-At the minimum, the model best matches measurements and should correspond to the underground phenomenon.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -314,8 +302,8 @@ At the minimum, the model best matches measurements and should correspond to the
 \begin{center}
 \includegraphics[width=0.7\textwidth]{wind_farm_model.pdf}
 \end{center}
-$x$ = position and characteristics of the wind mill, electrical network.
-$f()$ = cost aggregated with -1 $\times$ average power production.
+$x$ = positions and characteristics of the wind mills, electrical network.
+$f()$ = cost aggregated with -1 $\times$ expected power production.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -351,9 +339,22 @@ $f()$ = cost aggregated with -1 $\times$ average power production.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
+\frametitle{Optimization example: model identification}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{piton_fournaise.jpg}\\
+\vspace{-1cm}
+{\hfill\tiny (from \cite{fukushima2010evolution})}
+\end{center}
+$x$ = dike position, geometry, internal pressure\\
+$f(m())$ = distance between measures (from RADARSAT-1 satellite) and model (boundary elements, non trivial computation)\\
+At the minimum, the model best matches measurements and should correspond to the underground phenomenon.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
 \frametitle{Optimization example: neural net learning}
 \begin{minipage}{0.5\textwidth}
-$x$ = neural network (NN) weights and biases
+$x$ = neural network (NN) weights and biases, NN structure, hyper-parameters
 \vskip\baselineskip
 $f()$ = an error of the NN predictions w.r.t. data (a loss function)
 \end{minipage}
@@ -431,10 +432,15 @@ Elements of scientific knowledge appear when a problem is sufficiently decompose
 \item Close to Descartes' 2nd Rule in Discourse on the Method : ``Divide each difficulty into as many parts as is feasible and necessary to resolve it''
 (but applied to a scientific domain).
 \end{itemize}
-In the case of optimizers:
+\end{frame}
+
+%=======================================================================================
+\begin{frame}
+\frametitle{2 epistemological parallels}
+In the case of optimizers, the decomposition suggests 2 interpretations.
 \begin{itemize}
 \item A space-time generalized decomposition in the sense of Bernard Guy \cite{guyTempsEspace}, where time is related to the motion of the optimizer.
-\item When applied to machine learning, optimizers are part of a constructivist system \cite{sarkar2016constructivist}: learnings occurs by the interaction between perception (ideas, = simulated actions) and action, new experience, in a trial and error process guided by the optimizer.
+\item When applied to machine learning, optimizers are part of a constructivist system (\cite{sarkar2016constructivist}, Piaget): learnings occurs by the interaction between perception (ideas, = simulated actions, space of representation) and action, new experience, in a trial and error process guided by the optimizer.
 \end{itemize}
 \end{frame}
 
@@ -539,7 +545,7 @@ They appeared after World War II, thanks to the first computers and a sufficient
 \item Proven rapid (in polynomial time or super-linear) convergence for convex problems: cf. improved gradient descents such as BFGS (accounting for curvatures) and NAG \cite{nesterov1983method}.
 \item Algorithms adapted to stochastic functions (variants of stochastic gradients such as Adam \cite{kingma2014adam}).
 \item Algorithms using stochastic choices (e.g., CMA-ES \cite{hansen2001completely}).
-\item[$\Rightarrow$] Recognition of the importance of uncertainties, for which randomness is both an ingredient and a cure.
+\item[$\Rightarrow$] Recognition of the importance of uncertainties, for which randomness is both a difficulty and a cure.
 \newpage
 \item Algorithms building models of the function (Bayesian optimization, \cite{ExpectedImprovement}) or of their validity domain (DFO, \cite{audet2017derivative}).
 \item A lot of specialized versions: with/without constraints, for multiple objectives, with discrete and/or continuous variables, depending on the numerical cost of the function and the number of variables, \ldots
@@ -571,6 +577,9 @@ what's the point of accurately solving the problem since the formulation will al
 \item Some variables are missing (some dimensions of $\mathcal S$).
 \item Other objectives (utilities, $f_1(),\ldots,f_N()$, $N$ potentially infinite) exist as well.
 \end{itemize}
+\begin{center}
+\sout{optimal solution} $\Rightarrow$ satisfying solution
+\end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
