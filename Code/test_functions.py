@@ -52,7 +52,7 @@ def quadratic(x):
         update_H = True
         
     if update_H:
-        cond_no = 300 #condition number of Hessian
+        cond_no = 4 #condition number of Hessian
         eigvals = np.diag(np.linspace(1, cond_no,dim))
         # np.random.seed(1) # to make runs repeatable, 
         # potentially dangerous so I comment for now

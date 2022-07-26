@@ -298,7 +298,7 @@ $f()$ = an error of the NN predictions (sum-of-squares error):
 \includegraphics[width=0.7\textwidth]{michalewicz_function_annotated-crop.pdf} \\
 \end{center}
 \vspace{-1.0cm}
-R code to generate such a 3D plot given in the project folder, \texttt{3Dplots.R} \\
+Python code to generate such a 3D plot given in the \texttt{Code} folder, \texttt{3D\_plots.py} \\
 \vfill
 \end{frame}
 
@@ -314,6 +314,81 @@ Gradient of a function = direction of steepest ascent = vector of partial deriva
 \includegraphics[width=\textwidth]{gradient-crop.pdf} \\
 \end{minipage}
 \end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Hessian of a function} 
+It is the matrix of second derivatives, 
+\begin{equation*}
+\hess f(x) = 
+\begin{bmatrix}
+\frac{f(x)}{\partial x_1^2} & \frac{\partial^2 f(x)}{\partial x_1 \partial x_2} & \ldots & \frac{\partial^2 f(x)}{\partial x_1 \partial x_n}\\ 
+\frac{\partial^2 f(x)}{\partial x_1 \partial x_2} & \frac{\partial^2 f(x)}{\partial x_2^2} & \ldots & \frac{\partial^2 f(x)}{\partial x_2 \partial x_n}\\
+\ldots & \ldots & \ddots & \ldots \\
+\frac{\partial^2 f(x)}{\partial x_1 \partial x_n} & \frac{\partial^2 f(x)}{\partial x_2 \partial x_n} & \ldots & \frac{\partial^2 f(x)}{\partial x_n^2}
+\end{bmatrix}
+\end{equation*}
+= the matrix of curvatures = the gradient of the gradient.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+\frametitle{Quadratic function and Hessian} 
+\vskip -0.5cm
+\begin{equation*}
+f(x) ~=~ \frac{1}{2} x^\top H x \quad , \quad \hess f(x) = H
+\end{equation*}
+a good approximation to what happen on any function when converging
+\mbox{
+\begin{minipage}{0.5\textwidth}
+\includegraphics[width=\textwidth]{quad_rot0_cond5_H_1_0_0_5-crop.pdf}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{equation*}
+H = \begin{bmatrix} 1 & 0 \\ 0 & 5\end{bmatrix}
+\end{equation*}
+\vskip\baselineskip
+(guess the eigenvalues and eigenvectors)
+\end{minipage}
+}
+%%%
+\newpage
+\begin{minipage}{0.5\textwidth}
+\includegraphics[width=\textwidth]{quad_rot45_cond5_H_3_m2_m2_3-crop.pdf}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+the same rotated by 45$^\circ$
+\begin{align*}
+H =& \begin{bmatrix} 3 & -2 \\ -2 & 3\end{bmatrix}  \\
+\text{eig.vect} =& \begin{bmatrix} \sqrt{2}/2 & -\sqrt{2}/2 \\  \sqrt{2}/2 & \sqrt{2}/2 \end{bmatrix}\\
+\text{eig.val} = & [1, 5]
+\end{align*}
+\end{minipage}
+%%%
+\newpage
+\begin{minipage}{0.5\textwidth}
+\includegraphics[width=\textwidth]{quad_rot0_cond10_H_1_0_0_10-crop.pdf}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+increased curvature \\ 
+(condition number)
+\begin{align*}
+H =& \begin{bmatrix} 1 & 0 \\ 0 & 10\end{bmatrix}  
+\end{align*}
+\end{minipage}
+%%%
+\newpage
+\begin{minipage}{0.5\textwidth}
+\includegraphics[width=\textwidth]{quad_rot0_condm5_H_m1_0_0_5-crop.pdf}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+Non positive definite Hessian
+\begin{align*}
+H =& \begin{bmatrix} -1 & 0 \\ 0 & 5\end{bmatrix}  
+\end{align*}
+what is the problem ?
+\end{minipage}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

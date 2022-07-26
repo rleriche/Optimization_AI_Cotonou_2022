@@ -17,7 +17,7 @@ import test_functions
 dim = 2
 LB = [-5,-5]
 UB = [5,5]
-fun = test_functions.sphereL1
+fun = test_functions.quadratic
 
   
 # start drawing the function (necessarily dim==2)
@@ -32,6 +32,7 @@ xy = np.array([x,y])
 z = np.apply_along_axis(fun,0,xy)
 figure = plt.figure()
 axis = figure.gca( projection='3d')
+axis.set_zlim(0,150)
 axis.plot_surface(x, y, z, cmap='jet', shade= "false")
 plt.xlabel(xlabel="x1")
 plt.ylabel(ylabel="x2")
@@ -40,4 +41,4 @@ axis.set_zlabel("f")
 plt.show()
 plt.contour(x,y,z)
 plt.show()
-
+figure.savefig('plot.pdf')
