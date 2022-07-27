@@ -52,11 +52,11 @@
 {An introduction to optimization for machine learning}
 \author
 [Le Riche et al.]
-{\large Rodolphe Le Riche$^1$, Dédji Brian Whannou$^2$, Espéran Padonou$^3$} 
+{\large Rodolphe Le Riche$^1$, Dédji Brian Whannou$^2$, Kévin Kpakpo Akouété$^3$} 
 \institute[CNRS/fondat. Vallet]{
 $^1$ CNRS LIMOS at Mines Saint-Etienne, France \\
 $^2$ UBS Group AG \\
-$^3$ Fondation Vallet
+$^3$ Descartes Underwriting
 } 
 \date[July 2022]{July 2022 \\
 Ecole d'Eté en Intelligence Artificielle \\
@@ -339,7 +339,7 @@ It is the matrix of second derivatives,
 \begin{equation*}
 f(x) ~=~ \frac{1}{2} x^\top H x \quad , \quad \hess f(x) = H
 \end{equation*}
-a good approximation to what happen on any function when converging
+a good approximation to what happens on any function when converging
 \mbox{
 \begin{minipage}{0.5\textwidth}
 \includegraphics[width=\textwidth]{quad_rot0_cond5_H_1_0_0_5-crop.pdf}
@@ -523,7 +523,7 @@ The size of the steps is proportional to the gradient norm.
 \ENDIF
 \STATE \textbf{direction: } $d^i = - \grad f(x^i) / \lVert \grad f(x^i) \rVert$
 \STATE \textbf{step: } $x^{i+1} ~=~ x^i + \bar\alpha \lVert \grad f(x^i) \rVert d^i$
-\UNTIL{ {$i>i^{\text{max}}$} \OR {$\lVert x^i - x^{i-1}\rVert \le \epsilon^{\text{step}}$} \OR {$\lVert \grad f(x^i)\rVert \le \epsilon^{\text{grad}}$} }
+\UNTIL{ {$i>i^{\text{max}}$} \OR {$\lVert x^i - x^{i-1}\rVert \le \epsilon^{\text{step}}$} \OR {$\lVert \grad f(x^i)\rVert/\sqrt{n} \le \epsilon^{\text{grad}}$} }
 \RETURN $x^{\text{bestSoFar}}$ and $f^{\text{bestSoFar}}$
 \end{algorithmic}
 \end{block}
@@ -533,15 +533,12 @@ The size of the steps is proportional to the gradient norm.
 \begin{frame}
 \frametitle{(code organization)} 
 \begin{itemize}
-\item \texttt{mainOptim.R}: main script for starting the descent algorithms.
-\item \texttt{gradient\_descent.R}: gradient-based descent algorithms; the current gradient fixed-step version, and the ones coming up.
-\item \texttt{line\_searches.R}: line search routine.
-\item \texttt{test\_functions.R}: a collection of test functions.
-\item \texttt{3Dplots.R}: plots a 2 dimensional function in a 3D dynamic plot + contour plot.
-\item \texttt{utilities\_optim.R}: additional routines.
-\item \texttt{restarted\_descent.R}: program to restart the descent search + associated vizualizations.
-\item \texttt{neural\_net.R}: a feedforward network coded from scratch.
-\item \texttt{main\_neural\_net.R}: main script for learning a neural network with the optimization functions.
+\item \texttt{main\_optim.py}: main script for starting the descent algorithms.
+\item \texttt{gradient\_descent.py}: gradient-based descent algorithms; the current gradient fixed-step version, and the ones coming up (other direction, with a line search).
+\item \texttt{random\_search.py}: a random search algorithm.
+\item \texttt{test\_functions.py}: a collection of test functions.
+\item \texttt{3D\_plots.py}: plots a 2 dimensional function in a 3D dynamic plot + contour plot.
+\item \texttt{optim\_utilities.py}: additional routines.
 \end{itemize}
 \end{frame}
 
@@ -550,7 +547,7 @@ The size of the steps is proportional to the gradient norm.
 \frametitle{Fixed step steepest descent algorithm (2)} 
 \begin{itemize}
 \item The choice of the step size factor $\bar\alpha$ is critical : the steeper the function, the smaller $\bar\alpha$. Default value = 0.1
-\item The true code (cf. \texttt{gradient\_descent.R}) is much longer and filled with instructions for reporting the points visited and doing plots afterwards.
+\item The true code (cf. \texttt{gradient\_descent.R}) is a bit longer because it is necessary to record the points visited.
 \end{itemize}
 \vspace{-0.5cm}
 \begin{center}
@@ -966,75 +963,6 @@ Try function $f(x) = \sum_{i=1}^n \lvert x_i \rvert$ (``L1norm'') with the code.
 Main flaw: gets trapped in local minima.
 \end{frame}
 
-\subsection{Towards ML: regularized quadratic function}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-\frametitle{Towards ML: regularized quadratic function} 
-Let's consider a function with a relationship to ML:
-\begin{equation}
-f(x) ~=~ \sum_{i=1}^n (x_i-c_i)^2 + \lambda \sum_{i=1}^n \lvert x_i \rvert \quad,\quad \lambda \ge 0
-\label{eq:sphereL1}
-\end{equation}
-First term: sphere function centered at $c$, $c_i = i~,~i=1,\ldots,n$. A simplistic model to the mean square error of a NN where $c$ minimizes the training error.\\
-Second term: L1 norm times $\lambda$. The $x_i$'s would be the weights of a NN. 
-This term helps in improving the test error.
-Let's see why.
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-\frametitle{Exercise} 
-\begin{enumerate}
-\item Program the regularized sphere function (\ref{eq:sphereL1}). 
-\item Minimize it with any version of the previous descent algorithm with a line search in 
-dimension $n=10$ with $\mathcal S = [-5,5]^n$. 
-Try several values of $\lambda \ge 0$. What do you notice on the solution $x^\star$ found? 
-Why, if the $x$'s were a NN weights, would it improve the generalization ability of the NN?
-\end{enumerate}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[allowframebreaks] 
-\frametitle{Solution}
-\begin{enumerate}
-\item Cf. function \texttt{sphereL1} at the end of file \texttt{test\_functions}.
-\item ~\\
-{\scriptsize
-\begin{tabular}{|c|cccccccccc}
-$\lambda=0.01$ & 0.99 & 1.99 & 2.99 & 3.99 & 4.99 & 5 & 5 & 5 & 5 & 5 \\
-%$\lambda=0.1$ & 0.95 &1.95 &2.95 &3.95 &4.95 &5 &5 &5 &5 &5
-$\lambda=1$ &0.5 &1.5 &2.5 &3.5 &4.5 &5 &5 &5 &5 &5 \\
-$\lambda=3$ & 0 & 0.5 & 1.5 & 2.49 & 3.49 & 4.49&  5 & 5 & 5 & 5 \\
-$\lambda=5$ & 0 & 0 & 0.48 & 1.50 & 2.49 & 3.51 & 4.50 & 5 & 5 & 5 \\
-$\lambda=10$ & 0 & 0 & 0 & 0 & 0.16 & 0.90 & 2. & 3.23 & 3.92 & 5 
-\end{tabular}
-}
-As $\lambda$ increases, more $x_i$'s tend to 0. Because $c_i=i$, the components of lower rank are closer to 0, they are thus the first ones to be set to 0. \\
-This phenomenon can be better understood by interpreting Problem ~(\ref{eq:sphereL1}) as a constrained optimization problem.
-\begin{equation*}
-\left\{
-\begin{array}{l}
-\min_x f(x) = \lVert x - c \rVert^2 \\
-\text{tel que }~~ g(x) = \lVert x \rVert_1 - \tau \le 0 \quad,\quad \tau>0
-\end{array}
-\right.
-\end{equation*}
-has the following Lagrangian, to be minimized on $x$
-\begin{equation*}
-\min_x f(x) + \lambda^\star g(x) = \lVert x - c \rVert^2 + \lambda^\star \lVert x \rVert_1 - \lambda^\star\tau
-\end{equation*}
-The first 2 terms are the regularized function (\ref{eq:sphereL1}), the last term doesn't depend on $x$.
-Let's draw the sphere function and the constraint boundary $\lVert x \rVert_1$:
-\begin{center}
- \includegraphics[height=5cm]{l1sphere_regularization-crop.pdf}
-\end{center}
-It is seen that the solution tends to be at a vertex of the feasible domain, where some of the $x$ components cancel out. 
-This phenomenon occurs more often when $n$ is large and is less obvious for $n=2$. \\
-If the $x$'s were a NN weights, setting $x_i$ to 0 is equivalent to cutting the corresponding link, thus reducing the NN capacity, thus making it less prone to overfitting. Finding the best value for $\lambda$ is something of an art.
-\end{enumerate}
-\end{frame}
-
 \subsection{Making it more global: restarts}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1085,64 +1013,10 @@ Execution of the \texttt{restarted\_descent} file. \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}%[allowframebreaks]
 \frametitle{Application to neural network} 
-\begin{equation*}
-\begin{split}
-& \min_{x \in [LB,UB] \subset \Rset[n]} f_\lambda(x) = f(x) + \lambda \lVert x \rVert_1 \\
-& \text{ where, for classification, } \\
-& f(x) = - \sum_{i=1}^N \{ t^i \log(y(e^i;x)) + (1-t^i) \log(1 - y(e^i;x))\} \\
-& \text{ and for regression,} \\
-& f(x)  = 1/2 \sum_{i=1}^N (t^i - y(e^i;x))^2  
-\end{split}
-\end{equation*}
 \begin{center}
-\begin{minipage}[c]{0.6\textwidth}
-\end{minipage}
+The practical applications are available through the \texttt{project} notebook on github,
+cf. \url{https://github.com/rleriche/Optimization_AI_Cotonou_2022/blob/main/Code/project.ipynb}
 \end{center}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}%[allowframebreaks]
-\frametitle{Exercise: regularization vs. training data size} 
-Study the relationship between the number of training points and the best choice of the regularization parameter.
-\vskip\baselineskip
-To do this, use the file \texttt{main\_neural\_net} from \url{https://github.com/rleriche/Optimisation_AI_Cotonou2021}.
-It contains the code for a 2 inputs NN in regression, \texttt{ntrain} is the number of training points, \texttt{lambda} the regularization parameter. \\
-Try all the combinations between \texttt{ntrain}=5, 10 et 50, and $\lambda=0.01,~0.1$ et 1.
-\vskip\baselineskip
-What do you notice on the test error (\texttt{rmsetest}) ? How do you explain it ?
-How does the training error evolve (\texttt{rmsetrain}) ?
-Same question with the calculated solutions $x^\star$?
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[allowframebreaks]
-\frametitle{Solution} 
-Regularization vs. training size: the experiments yield:
-\begin{table}[H]
-\begin{tabular}{|l|c|c|c|}
-\hline
-~ & $\lambda=0.01$ &$\lambda=0.1$ &$\lambda=1$\\
-\hline
-\texttt{ntrain=5}& 0.62266703 &0.53166419 &\textcolor{red}{0.5217468}\\
-\hline
-\texttt{ntrain=10}& 0.66836290& \textcolor{red}{0.21722179}& 0.4202079\\
-\hline
-\texttt{ntrain=50}& \textcolor{red}{0.05191297}& 0.06292801& 0.4229770\\
-\hline
-\end{tabular}
-\caption{Root Mean Square Error on the test set, \texttt{ntest=100}.
-In red: smallest error per row (i.e., per training data set size).}
-\end{table}
-When \texttt{ntrain} is small, it is best to regularize a lot: $\lambda=1$ is the best setting with 5 training points.
-Vice versa, a large training set (50 points) does not need much regularization. 
-There is a trade-off between the NN flexibility  (that increases when $\lambda$ decreases) and the number of training points that constraint the NN: 
-a flexible NN with little constraints may be wrong away from the data points.
-\vskip\baselineskip
-
-\texttt{rmsetrain} increases with $\lambda$ since the emphasis is put on the minimization of $\lVert x \rVert_1$ at the expense of data fitting. 
-\vskip\baselineskip
-When $\lambda$ is large, some weights of the NN cancel out. 
-The number of null weights grows when the size of the training set diminishes.
 \end{frame}
 
 \section*{Conclusions}
