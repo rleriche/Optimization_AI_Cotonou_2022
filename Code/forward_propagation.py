@@ -41,15 +41,14 @@ def forward_propagation(inputs: np.ndarray,
     
     bias = np.repeat(np.array([[1]]), inputs.shape[0], axis=0)
 
-    layer_input = np.append(inputs,bias,axis = 1).T
+    layer_input = np.append(inputs,bias,axis = 1)
 
     for func,layer_weights in zip(activation_functions_parsed,weights):
+        layer_combinaison = layer_weights.dot(layer_input.T)
+        layer_output = apply_activation_functions(func,layer_combinaison.T)
+        layer_input = np.append(layer_output.T,bias,axis = 1)
 
-        layer_combinaison = layer_weights.dot(layer_input)
-        layer_output = apply_activation_functions(func,layer_combinaison)
-        layer_input = np.append(layer_output,bias,axis = 1).T
-
-    return layer_output
+    return layer_output.T
 
 def parse_activation_function(activation_functions, network_structure) -> list[list[Callable]]:
     activation_functions_parsed = deepcopy(activation_functions)

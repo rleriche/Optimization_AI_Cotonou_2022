@@ -5,8 +5,8 @@ def sigmoid(x: np.ndarray) -> np.ndarray:
     return res
 
 def relu(x: np.ndarray) -> np.ndarray:
-    x[x<0] = 0
-    return x
+    res = np.maximum(x,0)
+    return res
 
 def tanh(x: np.ndarray) -> np.ndarray:
     res = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
