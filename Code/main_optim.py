@@ -38,8 +38,8 @@ from gradient_descent import gradient_descent
 
 #########################
 # function definition
-fun = test_functions.quadratic
-dim = 20
+fun = test_functions.sphereL1
+dim = 10
 LB = [-5] * dim
 UB = [5] * dim
 # np.random.seed(123) # useful for repeated runs (quadratic fct or initial random point)
