@@ -6,6 +6,11 @@ A collection of utilities for testing optimizers
 @author: Rodolphe Le Riche, Brian Dédji Whannou
 """
 import numpy as np
+import matplotlib.pyplot as plt
+from typing import Callable
+
+
+#################################
 
 def record_hist(rec : dict, f : float, x : np.array, time: int, 
                 key_f : str, key_x : str, key_time : str) -> dict :
@@ -21,6 +26,8 @@ def record_hist(rec : dict, f : float, x : np.array, time: int,
         rec[key_x] = np.vstack([rec[key_x],x])     
             
     return rec
+
+#################################
 
 def record_best(rec : dict, fbest : float, xbest : np.array, time: int, printlevel: int) -> dict:
     """ create and update records of best so far """
@@ -40,3 +47,40 @@ def record_any(rec : dict, f : float, x : np.array, time: int, printlevel: int) 
                           key_f="hist_f",key_x="hist_x",key_time="hist_time")
         
     return rec
+
+#################################
+
+def print_rec(res : dict, fun: Callable, dim : int , LB : list, UB : list , printlevel : int, logscale = False):
+    print(f'search stopped after {res["time_used"]} evaluations of f because of {res["stop_condition"]}')
+    print("best objective function =",res["f_best"])
+    print("best x =", res["x_best"])
+    if printlevel > 0:
+        fig1, ax1 = plt.subplots()
+        if logscale:
+            plt.yscale("log")
+        ax1.plot((res["hist_time_best"]+ [res["time_used"]]) , (res["hist_f_best"] + [res["f_best"]]))
+        ax1.set_xlabel("no. calls to f")
+        ax1.set_ylabel("f")
+        if printlevel > 1:
+            ax1.plot(res["hist_time"],res["hist_f"])
+        if dim == 2: 
+            # 2D contour plot 
+            # start drawing the function (necessarily dim==2)
+            no_grid = 100
+            x1 = np.linspace(start=LB[0], stop=UB[0],num=no_grid)
+            x2 = np.linspace(start=LB[1], stop=UB[1],num=no_grid)
+            x, y = np.meshgrid(x1, x2)
+            xy = np.array([x,y])
+            z = np.apply_along_axis(fun,0,xy)
+            fig2, ax2 = plt.subplots()
+            # fquant = np.quantile(a=res["hist_f_best"],q=[0,0.05,0.1,0.2,0.5,0.7,1])
+            fmin = min(res["hist_f_best"])
+            fmax = max(res["hist_f_best"])
+            fquant = fmin + (np.linspace(start=0,stop=1,num=10)**2)*(fmax-fmin)        
+            CS = ax2.contour(x,y,z,levels=fquant)
+            ax2.clabel(CS, inline=True, fontsize=10)
+            # add history of best points onto it
+            if printlevel > 1:
+                ax2.plot(res["hist_x"][:,0],res["hist_x"][:,1],"ob",markersize=3)
+            ax2.plot(res["hist_x_best"][:,0],res["hist_x_best"][:,1],"or",markersize=4)
+            
