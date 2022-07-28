@@ -81,7 +81,7 @@ def create_layer_weights(inputs_size: int,outputs_size: int)-> np.ndarray:
     return layer_weights
 
 def create_weights(network_structure: list[int]) -> list[np.ndarray]:
-    np.random.seed(42)
+    # np.random.seed(42)
     weights = []
     for layer in range(0,len(network_structure)-1):
         weights.append(create_layer_weights(
