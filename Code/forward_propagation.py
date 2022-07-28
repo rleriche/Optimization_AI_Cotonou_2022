@@ -100,3 +100,14 @@ def vector_to_weights(vector: np.ndarray,network_structure: list[int]) -> list[n
         vector = vector[(input_size * output_size):]
     
     return weights
+
+def weights_to_vector(weights: list[np.ndarray]):
+    vector = []
+    network_structure = []
+    for layer_weight in weights:
+        vector = vector + layer_weight.reshape((1,-1))[0].tolist()
+        if len(network_structure) == 0:
+            network_structure = network_structure + [layer_weight.shape[1] - 1] 
+        network_structure = network_structure + [layer_weight.shape[0]] 
+        
+    return np.array(vector), network_structure
