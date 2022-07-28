@@ -7,7 +7,7 @@ import numpy as np
 from typing import Union, Callable
 from copy import deepcopy
 
-
+# TODO: make sure that the list of weights is coherent
 def forward_propagation(inputs: np.ndarray,
                weights: list[np.ndarray],
                activation_functions: Union[Callable,list[Callable],list[list[Callable]]]) -> np.ndarray:
