@@ -11,3 +11,7 @@ def relu(x: np.ndarray) -> np.ndarray:
 def tanh(x: np.ndarray) -> np.ndarray:
     res = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
     return res
+
+def linear(x: np.ndarray) -> np.ndarray:
+    res = x
+    return res

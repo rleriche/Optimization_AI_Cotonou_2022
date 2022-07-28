@@ -122,5 +122,11 @@ def sphereL1(x: np.array) -> float:
     lbda = 0.01
     return sphere(x) + lbda*L1norm(x)
 
+###########################################
 
+def linear_function(x):
+    d=len(x)
+    xstar=np.array(range(1,(d+1)))
+    xx=x.dot(xstar) + 3
+    return xx
 

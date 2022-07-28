@@ -181,7 +181,7 @@ def gradient_descent(
     budget: int = 1e3,
     step_factor: float = 1e-1,
     direction_type: str = "momentum",
-    do_linesearch : bool = False,
+    do_linesearch : bool = True,
     min_step_size: float = 1e-11,
     min_grad_size: float = 1e-6,
     inertia : float = 0.9,
@@ -223,7 +223,7 @@ def gradient_descent(
         gradient_size = np.linalg.norm(current_gradient)
         condition_gradient = (np.linalg.norm(gradient_size)/np.sqrt(dim)) <= min_grad_size
         # it does not make sense to do the rest if at a null-gradient point and 
-        # there is a risk a exception error
+        # there is a risk of exception error
         if not condition_gradient :      
             previous_x = current_x
     
@@ -244,10 +244,14 @@ def gradient_descent(
             violation = np.where(current_x>(np.array(LB)+tol),0,-1)+np.where(current_x<(np.array(UB)-tol),0,1)
             delta_x[np.where(violation*delta_x>0)]=0        
             
-            direction = delta_x / np.linalg.norm(delta_x)
+            if np.linalg.norm(delta_x)<tol:
+                condition_step = True
+            else:
+                direction = delta_x / np.linalg.norm(delta_x)
+                condition_step = False
                     
             # step in direction, with or without line search, to get new x
-            if do_linesearch:
+            if do_linesearch and not condition_step:
                 current_x,linesearch_cost,res = linesearch(x=current_x,f_x=current_f, 
                                                        gradf=current_gradient, 
                                                        direction=direction, 
