@@ -5,6 +5,7 @@
 """
 
 import numpy as np
+from typing import List
 from optim_utilities import record_best
 from optim_utilities import record_any
 
@@ -50,8 +51,8 @@ def linesearch(
     gradf: np.array,
     direction: np.array,
     func: object,
-    LB: list,
-    UB: list,
+    LB: List,
+    UB: List,
     rec : dict,
     printlevel : int,
     suffDecFact=0.1,
@@ -82,9 +83,9 @@ def linesearch(
         (hence works with momentum and NAG).
     func : object
         pointer to objective function.
-    LB : list
+    LB : List
         lower bounds on x.
-    UB : list
+    UB : List
         upper bounds on x.
     rec : dict
         recording of points tried.

@@ -4,27 +4,27 @@
     @author: Rodolphe Le Riche, Kevin Kpakpo, Brian Dedji Whannou
 """
 import numpy as np
-from typing import Union, Callable
+from typing import Union, Callable, List
 from copy import deepcopy
 
-# TODO: make sure that the list of weights is coherent
+# TODO: make sure that the List of weights is coherent
 def forward_propagation(inputs: np.ndarray,
-               weights: list[np.ndarray],
-               activation_functions: Union[Callable,list[Callable],list[list[Callable]]]) -> np.ndarray:
+               weights: List[np.ndarray],
+               activation_functions: Union[Callable,List[Callable],List[List[Callable]]]) -> np.ndarray:
     """
     Returns the output of the network.
 
             Parameters:
                     inputs: is an array of shape n,p 
                     (with p being the number of input features and n the number of observations)
-                    weights: list of matrices. 
+                    weights: List of matrices. 
                              Each matrix represents a layer. 
                              The number of rows is the number of nodes. 
                              The number of columns is the number inputs of the layer (with the bias)
                     activation_functions: the user can provide either
                         * one activation function for the whole network (one callable)
-                        * one activation function for each layer (list of callable)
-                        * one activation function per nodes (list of list of callable)
+                        * one activation function for each layer (List of callable)
+                        * one activation function per nodes (List of List of callable)
             Outputs:
                     layer_output: is an array of shape n,q
                     (with q being the number of nodes in the last layer and n the number of observations)
@@ -50,7 +50,7 @@ def forward_propagation(inputs: np.ndarray,
 
     return layer_output.T
 
-def parse_activation_function(activation_functions, network_structure) -> list[list[Callable]]:
+def parse_activation_function(activation_functions, network_structure) -> List[List[Callable]]:
     activation_functions_parsed = deepcopy(activation_functions)
     if isinstance(activation_functions, Callable):
         activation_functions_parsed = []
@@ -58,14 +58,14 @@ def parse_activation_function(activation_functions, network_structure) -> list[l
             layer_funcs = [activation_functions for n in range(0,number_nodes)]
             activation_functions_parsed.append(layer_funcs)
     
-    if isinstance(activation_functions,list):
+    if isinstance(activation_functions,List):
         if isinstance(activation_functions[0], Callable):
             activation_functions_parsed = []
             for func, number_nodes in zip(activation_functions, network_structure):
                 activation_functions_parsed.append([func for n in range(0,number_nodes)])
     return activation_functions_parsed
 
-def apply_activation_functions(functions: list[object], values: np.ndarray) -> np.ndarray:
+def apply_activation_functions(functions: List[object], values: np.ndarray) -> np.ndarray:
     all_activated_values = np.zeros(values.shape)
     for i in range(0,values.shape[0]):
         row_values = values[i,:]
@@ -80,7 +80,7 @@ def create_layer_weights(inputs_size: int,outputs_size: int)-> np.ndarray:
     
     return layer_weights
 
-def create_weights(network_structure: list[int]) -> list[np.ndarray]:
+def create_weights(network_structure: List[int]) -> List[np.ndarray]:
     # np.random.seed(42)
     weights = []
     for layer in range(0,len(network_structure)-1):
@@ -90,7 +90,7 @@ def create_weights(network_structure: list[int]) -> list[np.ndarray]:
         ))
     return weights
 
-def vector_to_weights(vector: np.ndarray,network_structure: list[int]) -> list[np.ndarray]:
+def vector_to_weights(vector: np.ndarray,network_structure: List[int]) -> List[np.ndarray]:
     weights = []
     for layer in range(0,len(network_structure)-1):
         input_size = (network_structure[layer] + 1)
@@ -101,7 +101,7 @@ def vector_to_weights(vector: np.ndarray,network_structure: list[int]) -> list[n
     
     return weights
 
-def weights_to_vector(weights: list[np.ndarray]):
+def weights_to_vector(weights: List[np.ndarray]):
     vector = []
     network_structure = []
     for layer_weight in weights:
