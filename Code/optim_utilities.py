@@ -7,7 +7,7 @@ A collection of utilities for testing optimizers
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Callable
+from typing import Callable, List
 
 
 #################################
@@ -50,7 +50,7 @@ def record_any(rec : dict, f : float, x : np.array, time: int, printlevel: int) 
 
 #################################
 
-def print_rec(res : dict, fun: Callable, dim : int , LB : list, UB : list , printlevel : int, logscale = False):
+def print_rec(res : dict, fun: Callable, dim : int , LB : List, UB : List , printlevel : int, logscale = False):
     print(f'search stopped after {res["time_used"]} evaluations of f because of {res["stop_condition"]}')
     print("best objective function =",res["f_best"])
     print("best x =", res["x_best"])
