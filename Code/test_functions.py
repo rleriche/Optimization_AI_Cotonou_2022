@@ -119,7 +119,7 @@ def sphereL1(x: np.array) -> float:
         sphere(x)+lbda*L1norm(x).
 
     """    
-    lbda = 0.01
+    lbda = 3.
     return sphere(x) + lbda*L1norm(x)
 
 ###########################################
