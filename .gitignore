@@ -1,0 +1,12 @@
+*.pyc
+**.egg-info/
+*.pyc
+.ipynb_checkpoints
+**.csv
+venv*
+.pytest_cache
+.vscode/
+data/
+*.out
+output/
+*__pycache__*
