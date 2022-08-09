@@ -23,3 +23,21 @@ Slides of the course entitled "An introduction to optimization for machine learn
 ### Code
 
 Code in python
+
+### setup your environment
+
+
+7. Move to the cloned repository `cd <foldername>`
+6. Run the command `python3 -m venv venv`
+6. Activate the venv: `source venv/bin/activate`
+6. Upgrade pip if needed `pip install --upgrade pip`
+7. Install packages needed with `pip install -r requirements/dev.txt`
+8. Install our package `<packagename>` with `pip install -e .`
+9. Create a jupyter kernel linked to this venv 
+
+ `ipython kernel install --name "venv" --user`
+
+  References: https://queirozf.com/entries/jupyter-kernels-how-to-add-change-remove.
+
+14. You can now open a notebook by running `jupyter notebook --no-browser`
+14. Select the kernel `venv` to run the notebook.
