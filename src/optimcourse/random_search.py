@@ -6,8 +6,8 @@ A simple random search within a bounded hypercube
 @author: Rodolphe Le Riche, Brian Dédji Whannou
 """
 import numpy as np
-from optim_utilities import record_best
-from optim_utilities import record_any
+from optimcourse.optim_utilities import record_best
+from optimcourse.optim_utilities import record_any
 
 
 def random_opt(func: object, LB, UB, budget: int = 1e3, printlevel=0):
