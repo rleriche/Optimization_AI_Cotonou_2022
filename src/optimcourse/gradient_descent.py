@@ -6,8 +6,8 @@
 
 import numpy as np
 from typing import List
-from optim_utilities import record_best
-from optim_utilities import record_any
+from optimcourse.optim_utilities import record_best
+from optimcourse.optim_utilities import record_any
 
 #%% finite difference function
 def gradient_finite_diff(
